@@ -1,0 +1,4 @@
+- [[Frontend (Vue)]]
+- [[Text To Speech (TTS)]]
+- [[MCP]]
+- [[Speech To Text (STT)]]

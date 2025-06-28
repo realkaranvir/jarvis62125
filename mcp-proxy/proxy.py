@@ -15,12 +15,29 @@ from quart_cors import cors
 
 load_dotenv() # Load environment variables from .env
 
+# TODO: encapsulate LLM client to enable easy switching between different LLMs
+# TODO: refactor code to be more modular and maintainable
+
+class AnthropicAPI:
+    def __init__(self):
+        self.anthropic = Anthropic()
+
+    def query_llm(self, messages: list, tools: list, system_prompt: str):
+        """Query the Anthropic LLM with given messages and tools"""
+        return self.anthropic.messages.create(
+            model="claude-3-7-sonnet-20250219",
+            max_tokens=1000,
+            messages=messages,
+            tools=tools,
+            system=system_prompt
+        )
+
 class MCPClient:
     def __init__(self):
         # Initialize session and client objects
         self.session: Optional[ClientSession] = None
         self.exit_stack = AsyncExitStack() # Handles closing of async resources
-        self.anthropic = Anthropic()
+        self.llm = AnthropicAPI()
     # methods will go here
     async def connect_to_server(self, server_script_path: str):
         """Connect to an MCP server
@@ -72,14 +89,15 @@ class MCPClient:
         } for tool in response.tools]
 
         # Initial Claude API call
-        response = self.anthropic.messages.create(
-            model="claude-3-7-sonnet-20250219",
-            max_tokens=1000,
+        response = self.llm.query_llm(
             messages=messages,
             tools=available_tools,
-            system=SYSTEM_PROMPT
+            system_prompt=SYSTEM_PROMPT
         )
+
         natural_language_response = []
+        # If LLM calls for tool call again we should loop again
+        # TODO: add a while loop around this for loop to handle tool calls after tool results
         for content in response.content:
             if content.type == 'text':
                 history.append({
@@ -87,7 +105,7 @@ class MCPClient:
                     "content": content.text
                 })
                 natural_language_response.append(content.text)
-                print(f"Claude: {content.text}")
+                print(f"LLM: {content.text}")
             elif content.type == 'tool_use':
                 tool_name = content.name
                 tool_args = content.input
@@ -95,12 +113,6 @@ class MCPClient:
                 result = await self.session.call_tool(tool_name, tool_args)
                 print(f"Tool call: {tool_name} with args: {tool_args}")
                 print(f"Tool result: {result.content[0].text}")
-
-                # If the tool called was the prompt_user_for_input tool, we need to ask the user for more information.
-                if result.content[0].text == "MORE_INFO_NEEDED":
-                    # Break to prevent calling LLM unnecessarily
-                    break
-
                 # Append the tool call and result to both messages and history
                 tool_call = {
                     "role": "assistant",
@@ -130,23 +142,21 @@ class MCPClient:
                 history.extend([tool_call, tool_result])
 
                 # Get next response from Claude after tool result
-                response = self.anthropic.messages.create(
-                    model="claude-3-7-sonnet-20250219",
-                    max_tokens=1000,
+                response = self.llm.query_llm(
                     messages=messages,
                     tools=available_tools,
-                    system=SYSTEM_PROMPT
+                    system_prompt=SYSTEM_PROMPT
                 )
+
                 history.append({
                     "role": "assistant",
                     "content": response.content[0].text
                 })
                 natural_language_response.append(response.content[0].text)
-                print(f"Claude: {response.content[0].text}")
+                print(f"LLM: {response.content[0].text}")
         return_object = {
             "history": history, # History of the chat (needed for tool use flow)
             # Return the final answer by the LLM
-            # TODO: Test to see if the last response is always enough
             "LLM_response": natural_language_response[-1], 
         }
         return return_object

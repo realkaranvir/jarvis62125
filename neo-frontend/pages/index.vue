@@ -1,43 +1,17 @@
 <template>
   <div class="flex flex-col items-center justify-end h-screen">
     <div
-      class="mb-auto mt-4 font-thin flex flex-row items-center justify-center gap-2"
+      class="p-4  text-center"
     >
-      <p>
-        {{ connectionStatus }}
-      </p>
-      <UIcon
-        v-show="connectionStatus === serverStatus.CONNECTING"
-        name="svg-spinners:8-dots-rotate"
-        class="size-5 text-orange-500"
-      />
-      <UIcon
-        v-show="connectionStatus === serverStatus.CONNECTED"
-        name="material-symbols-light:stat-0-rounded"
-        class="size-5 text-green-500"
-      />
-      <UTooltip
-        :text="
-          connectionStatus === serverStatus.REFUSED
-            ? 'Server refused connection'
-            : 'Is the server down?'
-        "
-      >
-        <div>
-          <UIcon
-            v-show="
-              connectionStatus === serverStatus.REFUSED ||
-              connectionStatus === serverStatus.ERROR
-            "
-            name="material-symbols-light:warning"
-            class="size-5 text-red-500"
-          />
-        </div>
-      </UTooltip>
+    <UAlert
+      :color="statusConfig.color"
+      :title="statusConfig.title"
+      :description="listening ? `${assistantName} is listening` : ''"
+    />
     </div>
 
     <div
-      class="mt-auto mb-auto font-thin flex flex-col items-center justify-center text-center gap-2"
+      class="mt-auto mb-auto font-thin flex flex-col items-center justify-center text-center gap-2 bg-gray-750 rounded-md max-w-3/4"
     >
       <p
         v-show="!gettingResponse"
@@ -46,16 +20,16 @@
         {{ response }}
       </p>
     </div>
-    <p v-show="loadingPercent < 100" class="animate-pulse">{{ name }} is loading...</p>
-    <p v-show="listening" class="text-sm text-gray-500">
-        {{name}} is listening...
-      </p>
-    <UProgress v-show="loadingPercent != 100" v-model="loadingPercent" color="neutral" class="w-lg" />
+    <div>
+      <SettingsPanel class="absolute right-4 top-4" />
+    </div>
+    <p v-show="loadingPercent < 100 && ttsEngine !== 'server'" class="animate-pulse">{{ assistantName }} is loading...</p>
+    <UProgress v-show="loadingPercent != 100 && ttsEngine !== 'server'" v-model="loadingPercent" color="neutral" class="max-w-lg w-lg" />
     <UProgress v-show="gettingResponse" class="w-lg" />
     <UTextarea
-      class="w-1/2 m-8"
+      class="w-1/2 m-8 "
       color="neutral"
-      variant="soft"
+      variant="subtle"
       placeholder="Type something..."
       :maxrows="8"
       autoresize
@@ -67,7 +41,19 @@
 </template>
 
 <script setup lang="ts">
+import SettingsPanel from '~/components/SettingsPanel.vue';
 import * as tts from '@diffusionstudio/vits-web';
+const {
+  llm,
+  ttsEngine,
+  ttsVoice,
+  ttsSpeed,
+  assistantName,
+  callNameInterval,
+  micMuted,
+  speakerMuted
+} = useConfig();
+
 const { MicVAD, utils } = await import("@ricky0123/vad-web");
 const enum serverStatus {
   CONNECTING = "Connecting",
@@ -75,6 +61,45 @@ const enum serverStatus {
   REFUSED = "Connection Refused",
   ERROR = "Error Connecting",
 }
+const statusConfig = computed<{
+  color: "neutral" | "primary" | "error" | "secondary" | "success" | "info" | "warning" | undefined;
+  title: string;
+  icon: string;
+}>(() => {
+  switch (connectionStatus.value) {
+    case serverStatus.CONNECTING:
+      return {
+        color: 'neutral',
+        title: 'Connecting...',
+        icon: 'svg-spinners:8-dots-rotate',
+      }
+    case serverStatus.CONNECTED:
+      return {
+        color: 'primary',
+        title: 'Connected!',
+        icon: 'material-symbols-light:stat-0-rounded',
+      }
+    case serverStatus.REFUSED:
+      return {
+        color: 'error',
+        title: 'Connection Refused',
+        icon: 'material-symbols-light:warning',
+      }
+    case serverStatus.ERROR:
+      return {
+        color: 'error',
+        title: 'Connection Error',
+        icon: 'material-symbols-light:warning',
+      }
+    default:
+      return {
+        color: 'neutral',
+        title: 'Status Unknown',
+        icon: 'i-lucide-terminal',
+      }
+  }
+})
+
 const value = ref("");
 const connectionStatus = ref(serverStatus.CONNECTING);
 const gettingResponse = ref(false);
@@ -82,43 +107,69 @@ const history = ref([]);
 const response = ref("");
 const currentAudioBlob = ref<Blob | null>(null);
 const listening = ref(false);
+const currentCallNameSeconds = ref(0);
 const loadingPercent = ref(0);
-const localTTS = ref(false); // Set to true to use local TTS, false to use server TTS
-let name = "J.A.R.V.I.S.";
+let interval: ReturnType<typeof setInterval> | null = null;
+let myvad: any = null;
 
 onMounted(() => {
   handleConnect();
+  listening.value = !(micMuted.value);
 });
+
+async function startMicVAD() {
+  try {
+    myvad = await MicVAD.new({
+      onSpeechEnd: (audio) => {
+        console.log("Speech Ended");
+        console.log(audio);
+        const wavBuffer = utils.encodeWAV(audio);
+        const audioBlob = new Blob([wavBuffer], { type: "audio/wav" });
+        currentAudioBlob.value = audioBlob;
+      },
+      positiveSpeechThreshold: 0.7,
+    });
+    myvad.start();
+    listening.value = true;
+  } catch (error: any) {
+    console.error(error);
+  }
+}
+
+async function downloadTTSEngine() {
+  try {
+    if (tts.stored.length > 0) {
+      console.log("TTS engine already downloaded:", tts.stored);
+      return;
+    }
+    await tts.download('en_US-hfc_female-medium', (progress) => {
+      console.log(`Downloading ${progress.url} - ${Math.round(progress.loaded * 100 / progress.total)}%`);
+      loadingPercent.value = Math.round(progress.loaded * 100 / progress.total);
+      if (loadingPercent.value === 100) {
+        console.log("TTS model downloaded successfully.");
+      }
+    });
+  } catch (error: any) {
+    console.error("Error downloading TTS engine:", error);
+  }
+}
 
 onMounted(async () => {
   // Only run this code in the browser
   if (process.client || typeof window !== "undefined") {
     try {
-      const myvad = await MicVAD.new({
-        onSpeechEnd: (audio) => {
-          console.log("Speech Ended");
-          console.log(audio);
-          const wavBuffer = utils.encodeWAV(audio);
-          const audioBlob = new Blob([wavBuffer], { type: "audio/wav" });
-          currentAudioBlob.value = audioBlob;
-        },
-        positiveSpeechThreshold: 0.7,
-      });
-      myvad.start();
+      if (!micMuted) {
+        await startMicVAD();
+      }
     } catch (error: any) {
       console.error(error);
     }
   }
 
-  // Download the local TTS model just in case
-  await tts.download('en_US-hfc_female-medium', (progress) => {
-    console.log(`Downloading ${progress.url} - ${Math.round(progress.loaded * 100 / progress.total)}%`);
-    loadingPercent.value = Math.round(progress.loaded * 100 / progress.total);
-    if (loadingPercent.value === 100) {
-      console.log("TTS model downloaded successfully.");
-      listening.value = true;
-    }
-  });
+  if (ttsEngine.value === "local") {
+    // Initialize the TTS engine
+    await downloadTTSEngine();
+  }
 });
 
 // When we get a new audio blob, submit it to the server
@@ -128,8 +179,52 @@ watch(currentAudioBlob, (newValue, oldValue) => {
   }
 });
 
+watch(micMuted, async (newVal, oldVal) => {
+  // If the mic is muted, destroy the VAD instance
+  if (myvad) {
+    if (newVal == true) {
+      myvad.destroy();
+      listening.value = false;
+    } else {
+      await startMicVAD();
+    }
+  } else {
+    if (newVal == false) {
+      await startMicVAD();
+    }
+  }
+});
+
+watch(ttsEngine, async (newVal, oldVal) => {
+  if (newVal === "local" && tts.stored.length === 0) {
+    // Initialize the TTS engine
+    await downloadTTSEngine();
+  }
+});
+
+function setCallNameInterval(seconds: number = callNameInterval.value) {
+    if (interval) { clearInterval(interval); }
+
+    currentCallNameSeconds.value = seconds;
+    interval = setInterval(() => {
+      if (currentCallNameSeconds.value > 0) {
+        currentCallNameSeconds.value--;
+        console.log(`Call name interval: ${currentCallNameSeconds.value} seconds remaining`);
+      } else {
+        if (interval) { clearInterval(interval); }
+        interval = null;
+      }
+    }, 1000);
+  }
+
 // Submit audio to server, get transcription, and send query to server
 async function submitAudio(audioBlob: Blob | null) {
+  if (connectionStatus.value !== serverStatus.CONNECTED) {
+    console.error("Not connected to the server");
+    return;
+  }
+  listening.value = false; // Stop listening while processing audio
+  gettingResponse.value = true; // Show loading state
   const formData = new FormData();
   if (audioBlob) {
     formData.append("file", audioBlob, "audio.wav");
@@ -150,23 +245,25 @@ async function submitAudio(audioBlob: Blob | null) {
   const data = await res.json();
   const transcription = data.text;
 
-  // Needs to start with name for query to work
-  // TODO: add check for name as first word if conversation isn't ongoing
-
   console.log("Transcription:", transcription);
-  if (transcription.length < 1) {
+
+  // If the call name interval is 0, the user needs to call the assistant's name again
+  if ((callNameInterval.value == 0 && !transcription.toLowerCase().includes(assistantName.value.toLowerCase())) || transcription.length < 1) {
+    listening.value = true; // Reset listening state
     return;
   }
-  // Set gettingResponse to true to show the loading state
-  gettingResponse.value = true;
   // Send the query to the server
   try {
     const res = await sendQuery(transcription);
+    if (!res) {
+      listening.value = true; // Reset listening state if no response
+      return;
+    }
     response.value = res.response.LLM_response;
   } catch (error) {
-    response.value = `${name} is malfunctioning.`;
+    listening.value = true; // Reset listening state if there's an error
+    response.value = `${assistantName} is malfunctioning.`;
   }
-
   gettingResponse.value = false;
 }
 
@@ -192,14 +289,15 @@ async function handleConnect() {
 
 // Send query to the server and update history
 async function sendQuery(query: string) {
-  listening.value = false;
   try {
-    if (!query) {
+    if (!query || query.trim() === "" || connectionStatus.value !== serverStatus.CONNECTED) {
       return;
     }
-    if (query.trim() === "") {
-      return;
-    }
+
+    // Stop listening while sending query and speaking response to avoid feedback loops
+    listening.value = false;
+
+    // Send query and history to the server
     const response = await fetch("http://127.0.0.1:5000/query", {
       method: "POST",
       headers: {
@@ -208,33 +306,47 @@ async function sendQuery(query: string) {
       body: JSON.stringify({ query: query, history: history.value }),
     });
     const res = await response.json();
+
+    // Add result of query to history
     history.value = res.response.history.slice(
       Math.max(res.response.history.length - 10, 0),
       res.response.history.length
     );
 
+    // If the speaker isn't muted, play the audio
+    if (!speakerMuted.value) {
+      let wav: string | null = null;
+      // Play the response using TTS
+      if (ttsEngine.value === "local") {
+        let blob: Blob;
+        blob = await tts.predict({
+          text: res.response.LLM_response,
+          voiceId: 'en_US-hfc_female-medium',
+        });
+        wav = URL.createObjectURL(blob)
+      } else {
+        // Use the TTS server to get the audio file
+        wav = await getSpeechFileFromTTSServer(res.response.LLM_response);
+      }
 
-    let wav: string | null = null;
-    // Play the response using TTS
-    if (localTTS.value == true) {
-      let blob: Blob;
-      blob = await tts.predict({
-        text: res.response.LLM_response,
-        voiceId: 'en_US-hfc_female-medium',
-      });
-      wav = URL.createObjectURL(blob)
+      try {
+        // Play the audio
+        const audio = new Audio();
+        audio.src = wav;
+        audio.playbackRate = ttsSpeed.value;
+        audio.play();
+        audio.onended = () => {
+          listening.value = true;
+          setCallNameInterval(callNameInterval.value); // Reset the timer
+        };
+      } catch (error) {
+        console.error("Error playing audio:", error);
+        listening.value = true; // Reset listening state if audio fails
+      }
     } else {
-      // Use the TTS server to get the audio file
-      wav = await getSpeechFileFromTTSServer(res.response.LLM_response);
-    }
-
-    const audio = new Audio();
-    audio.src = wav;
-    audio.playbackRate = 1.2;
-    audio.play();
-    audio.onended = () => {
       listening.value = true;
-    };
+      setCallNameInterval(callNameInterval.value); // Reset the timer
+      }
     return res;
   } catch (error) {
     console.error("Error submitting data:", error);
@@ -259,9 +371,12 @@ async function handleEnter(event: KeyboardEvent) {
   // Send the query to the server
   try {
     const res = await sendQuery(query);
+    if (!res) {
+      return;
+    }
     response.value = res.response.LLM_response;
   } catch (error) {
-    response.value = `${name} is malfunctioning.`;
+    response.value = `${assistantName} is malfunctioning.`;
   }
 
   gettingResponse.value = false;
