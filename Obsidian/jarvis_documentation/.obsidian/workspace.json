@@ -69,12 +69,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Text To Speech (TTS).md",
-                "mode": "source",
+                "file": "Running All Services.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Text To Speech (TTS)"
+              "title": "Running All Services"
             }
           }
         ],
