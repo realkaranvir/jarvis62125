@@ -4,14 +4,19 @@
 #### Installation
 ```
 cd tts
+uv python install 3.10
+uv run python3.10 -m venv .venv
 source .venv/bin/activate
 cd piper/src/python_run
 pip install -e .
 pip install -r requirements_http.txt
 pip install piper-phonemize-cross
+cd ../../.. (go back to tts dir)
+mkdir models (place models here)
 ```
+[Jarvis](https://huggingface.co/jgkawell/jarvis/tree/main/en/en_GB/jarvis/high)
 #### Running
 ```
-cd tts/models
+cd models
 python -m piper.http_server --model jarvis/jarvis-high.onnx
 ```

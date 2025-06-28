@@ -113,7 +113,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -238,9 +239,9 @@
   "active": "8ebb45d16c668e79",
   "lastOpenFiles": [
     "Speech To Text (STT).md",
+    "Text To Speech (TTS).md",
     "Running All Services.md",
     "Frontend (Vue).md",
-    "MCP.md",
-    "Text To Speech (TTS).md"
+    "MCP.md"
   ]
 }
