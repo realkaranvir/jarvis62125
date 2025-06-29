@@ -69,12 +69,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "VPN (ZeroTier).md",
+                "file": "Text To Speech (TTS).md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "VPN (ZeroTier)"
+              "title": "Text To Speech (TTS)"
             }
           }
         ],
@@ -238,8 +238,8 @@
   },
   "active": "8ebb45d16c668e79",
   "lastOpenFiles": [
-    "Todo.md",
     "VPN (ZeroTier).md",
+    "Todo.md",
     "Text To Speech (TTS).md",
     "Speech To Text (STT).md",
     "Frontend (Vue).md",

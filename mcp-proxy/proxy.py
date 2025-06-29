@@ -221,11 +221,11 @@ async def query_llm():
         if not query or not isinstance(query, str) or len(query) == 0 or len(query) > 1000:
             return jsonify({'error': 'Invalid query'}), 400
         response = await client.process_query(query, history)
-        return jsonify({'response': response})
+        return jsonify({'response': response}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(use_reloader=False, debug=True)
+    app.run(use_reloader=False, debug=True) # TODO: change
 
     

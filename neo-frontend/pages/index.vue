@@ -100,6 +100,7 @@ const statusConfig = computed<{
   }
 })
 
+const ttsListeningDelay = 5000; // in milliseconds
 const value = ref("");
 const connectionStatus = ref(serverStatus.CONNECTING);
 const gettingResponse = ref(false);
@@ -210,6 +211,7 @@ function setCallNameInterval(seconds: number = callNameInterval.value) {
       if (currentCallNameSeconds.value > 0) {
         currentCallNameSeconds.value--;
         console.log(`Call name interval: ${currentCallNameSeconds.value} seconds remaining`);
+        console.log(listening.value);
       } else {
         if (interval) { clearInterval(interval); }
         interval = null;
@@ -232,9 +234,8 @@ async function submitAudio(audioBlob: Blob | null) {
     console.error("No audio blob available to submit.");
     return;
   }
-  formData.append("model", "Systran/faster-whisper-tiny.en");
 
-  const res = await fetch("http://localhost:8000/v1/audio/transcriptions", {
+  const res = await fetch("http://localhost:5001/transcribe", {
     method: "POST",
     body: formData,
   });
@@ -243,7 +244,7 @@ async function submitAudio(audioBlob: Blob | null) {
     throw new Error("Transcription failed");
   }
   const data = await res.json();
-  const transcription = data.text;
+  const transcription = data.transcription;
 
   console.log("Transcription:", transcription);
 
@@ -336,7 +337,9 @@ async function sendQuery(query: string) {
         audio.playbackRate = ttsSpeed.value;
         audio.play();
         audio.onended = () => {
-          listening.value = true;
+          setTimeout(() => {
+            listening.value = true;
+          }, ttsListeningDelay);
           setCallNameInterval(callNameInterval.value); // Reset the timer
         };
       } catch (error) {
