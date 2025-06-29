@@ -1,0 +1,31 @@
+
+- Make proxy for back end services
+	- Abstract away transcription behind proxy so front end doesn't have to worry about routing
+		- Front end should only send inputs to the proxy (audio, text, images, etc.)
+- [[Speech To Text (STT)]] needs to be just faster-whisper server
+- Servers need to be converted to docker containers
+	- [[Text To Speech (TTS)]]
+	- [[Speech To Text (STT)]]
+	- [[MCP]]
+- Jarvis' memory
+	- Hard disk
+	- In-memory
+- Jarvis message queue system (JMQS)
+	- Ex:
+		- Ask Jarvis a question
+		- Get response (fast)
+		- Tool calls
+		- Get final result
+		- Ready to re-prompt
+	- Needs to block for responses
+		- Ability to cancel requests
+		- Timeouts (error handling)
+- Frontend error handling
+	- If any server fails it should handle gracefully
+	- Connection status should be based on all server's health endpoint
+	- Health check should activate periodically
+- DevOps automation
+	- Docker container pushing on main branch
+	- Tests
+	- AI agent who can restart servers after updates
+	- Automation in dependency installing and running all servers via one script

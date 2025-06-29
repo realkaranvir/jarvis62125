@@ -10,6 +10,7 @@ uv sync --all-extras
 ```
 #### Running
 ```
+source .venv/bin/activate
 export ALLOW_ORIGINS='["*"]'
 uvicorn --factory --host 0.0.0.0 speaches.main:create_app
 ```

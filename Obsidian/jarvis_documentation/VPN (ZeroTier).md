@@ -1,0 +1,5 @@
+- For remote access to Jarvis, the linux environment can be accessed via RDP.
+	- hostname: jarvis:3389
+	- user: karan
+	- password: pc password
+- To use the ZeroTier VPN, add the device to the network via this admin console: [Admin Console](https://my.zerotier.com/network/48d6023c46aec84f)

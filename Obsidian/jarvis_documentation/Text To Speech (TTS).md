@@ -17,6 +17,8 @@ mkdir models (place models here)
 [Jarvis](https://huggingface.co/jgkawell/jarvis/tree/main/en/en_GB/jarvis/high)
 #### Running
 ```
+cd tts
+source .venv/bin/activate
 cd models
 python -m piper.http_server --model jarvis/jarvis-high.onnx
 ```

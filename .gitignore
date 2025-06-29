@@ -3,3 +3,5 @@ venv/
 .DS_Store
 tts/models/*
 node_modules
+*.idea
+*.idea/*
