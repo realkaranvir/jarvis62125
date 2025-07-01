@@ -309,10 +309,10 @@ async function sendQuery(query: string) {
     const res = await response.json();
 
     // Add result of query to history
-    history.value = res.response.history.slice(
-      Math.max(res.response.history.length - 10, 0),
-      res.response.history.length
-    );
+    history.value = res.response.history;
+    if (res.response.LLM_response.length <=0) {
+      return;
+    }
 
     // If the speaker isn't muted, play the audio
     if (!speakerMuted.value) {

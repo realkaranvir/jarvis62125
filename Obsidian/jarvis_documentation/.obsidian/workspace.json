@@ -77,23 +77,6 @@
               "title": "Text To Speech (TTS)"
             }
           }
-        ],
-        "currentTab": 4
-      },
-      {
-        "id": "d57eadced5748cc6",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "a19d2cafd686f92b",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
-            }
-          }
         ]
       }
     ],
@@ -236,14 +219,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8ebb45d16c668e79",
+  "active": "da48638071e3d718",
   "lastOpenFiles": [
-    "VPN (ZeroTier).md",
-    "Todo.md",
-    "Text To Speech (TTS).md",
     "Speech To Text (STT).md",
-    "Frontend (Vue).md",
+    "Text To Speech (TTS).md",
     "MCP.md",
-    "Running All Services.md"
+    "Todo.md",
+    "Requirements.md",
+    "VPN (ZeroTier).md",
+    "Running All Services.md",
+    "Frontend (Vue).md"
   ]
 }

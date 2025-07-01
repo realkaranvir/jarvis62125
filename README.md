@@ -37,7 +37,7 @@ uv sync
 
 #### Running
 cd mcp-proxy
-python proxy.py
+python main.py
 
 ### Frontend
 

@@ -4,7 +4,11 @@ import requests
 import os
 import sys
 import signal
+
 from mcp.server.fastmcp import FastMCP
+
+# Constants
+response_cap = 500 # in characters
 
 # Initializing server
 mcp = FastMCP()
@@ -19,7 +23,31 @@ signal.signal(signal.SIGINT, signal_handler)
 browser = None
 tab = None
 
-def brave_search(query: str, count: int = 4):
+def cleanse_brave_search(response):
+    cleansed_result = {}
+    i = 0
+    try:
+        for result in response['news']['results']:
+            try:
+                for snippet in result['extra_snippets']:
+                    cleansed_result[f'result_{i}'] = snippet
+                    i += 1
+            except:
+                cleansed_result[f'result_{i}'] = result['description']
+                i += 1
+    except:
+        cleansed_result = {}
+    for result in response['web']['results']:
+        try:
+            for snippet in result['extra_snippets']:
+                cleansed_result[f'result_{i}'] = snippet
+                i += 1
+        except:
+            cleansed_result[f'result_{i}'] = result['description']
+            i += 1
+    return cleansed_result
+
+def brave_search(query: str, count: int = 2):
     url = "https://api.search.brave.com/res/v1/web/search"
     headers = {
         "Accept": "application/json",
@@ -32,32 +60,29 @@ def brave_search(query: str, count: int = 4):
 
     }
     response = requests.get(url, headers=headers, params=params)
-    return response.json()
+    clean_response = cleanse_brave_search(response.json())
+    return clean_response
 
 @mcp.tool()
-async def search_the_internet(query: str, search_engine: int) -> str:
-    """Search the internet for information with a given query. Only use if you don't already have the information.
+async def search_the_internet(query: str) -> str:
+    """Search the internet for information with a given query.
     
     Args:
         query: Search query to look up.
-        search_engine: 0 for Brave Search. More to be added later.
     
     Returns:
         Extracted information from the search results or error message.
     """
     try:
         search_results = None
-        if search_engine == 0:
-            search_results = brave_search(query)
-        else:
-            return "Unsupported search engine. Please use Brave Search (0) for now."
+        search_results = brave_search(query)
         return search_results
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
 @mcp.tool()
-async def execute_command_on_macos_terminal(command: str) -> str:
-    """Execute a command on the macOS terminal.
+async def execute_command(command: str) -> str:
+    """Execute a command in the unix/linux terminal. Ensure to only run commands that won't return super long outputs.
     
     Args:
         command: The command to execute.

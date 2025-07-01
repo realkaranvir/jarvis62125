@@ -1,4 +1,9 @@
 
+- fine-tune ollama model selection for jarvis, tool use, formatting
+	- potentially use another model for formatting the final output. wouldn't have to worry about tool use
+- frontend cannot splice in between tool use and call segments (anthropic api freaks out)
+	- need to figure out a way to trim history? i think the ai might already do it though.
+- ollama create new models for new names?
 - Make proxy for back end services
 	- Abstract away transcription behind proxy so front end doesn't have to worry about routing
 		- Front end should only send inputs to the proxy (audio, text, images, etc.)

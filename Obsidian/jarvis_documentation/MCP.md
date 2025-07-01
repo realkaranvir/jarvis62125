@@ -15,5 +15,5 @@ uv sync
 ```
 cd mcp-proxy
 source .venv/bin/activate
-python proxy.py
+python main.py
 ```

@@ -1,16 +1,13 @@
-#### Runs via Speaches
-- [Github](https://github.com/speaches-ai/speaches)
-- Needs to be converted to just faster-whisper
+#### Uses faster-whisper
+- Used to be through speaches, now uses faster-whisper quart server
 #### Installation
 ```
-cd speaches
-uv venv
-source .venv/bin/activate
-uv sync --all-extras
+cd stt
+uv sync
 ```
 #### Running
 ```
+cd stt
 source .venv/bin/activate
-export ALLOW_ORIGINS='["*"]'
-uvicorn --factory --host 0.0.0.0 speaches.main:create_app
+python main.py
 ```

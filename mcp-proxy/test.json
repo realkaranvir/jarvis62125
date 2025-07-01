@@ -1,0 +1,407 @@
+{
+    "query": {
+        "original": "gta 6 info",
+        "show_strict_warning": false,
+        "is_navigational": false,
+        "is_news_breaking": false,
+        "spellcheck_off": true,
+        "country": "us",
+        "bad_results": false,
+        "should_fallback": false,
+        "postal_code": "",
+        "city": "",
+        "header_country": "",
+        "more_results_available": true,
+        "state": ""
+    },
+    "mixed": {
+        "type": "mixed",
+        "main": [
+            {
+                "type": "web",
+                "index": 0,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 1,
+                "all": false
+            },
+            {
+                "type": "news",
+                "all": true
+            },
+            {
+                "type": "web",
+                "index": 2,
+                "all": false
+            },
+            {
+                "type": "videos",
+                "all": true
+            },
+            {
+                "type": "web",
+                "index": 3,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 4,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 5,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 6,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 7,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 8,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 9,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 10,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 11,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 12,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 13,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 14,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 15,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 16,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 17,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 18,
+                "all": false
+            },
+            {
+                "type": "web",
+                "index": 19,
+                "all": false
+            }
+        ],
+        "top": [],
+        "side": []
+    },
+    "news": {
+        "type": "news",
+        "results": [
+            {
+                "title": "GTA 6 fans can now add the game to Xbox Wishlist",
+                "url": "https://arynews.tv/gta-6-fans-can-now-add-the-game-to-xbox-wishlist/",
+                "is_source_local": false,
+                "is_source_both": false,
+                "description": "Fans of the game anticipated that the option to add <strong>GTA</strong> <strong>6</strong> to the Wishlist might hint at the release of the game’s content sooner than expected. Additionally, players can keep track of the game’s status through regular information coming through its Store page.",
+                "page_age": "2025-06-28T12:25:04",
+                "profile": {
+                    "name": "ARY NEWS",
+                    "url": "arynews.tv",
+                    "long_name": "arynews.tv",
+                    "img": "https://imgs.search.brave.com/OzEtesx36_C1SzX6XG91FGE-gOuAo8R-w2rWOpBJmT8/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvNGU3YmYxYWQ0/MTc5YTVkN2ViN2Qy/NDUxOWI3MWQzOGQ5/OTUzMTMwMjg0NzIw/NjUwYjMyZjUyMzc0/NjVkMjJmYS9hcnlu/ZXdzLnR2Lw"
+                },
+                "family_friendly": true,
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "arynews.tv",
+                    "hostname": "arynews.tv",
+                    "favicon": "https://imgs.search.brave.com/OzEtesx36_C1SzX6XG91FGE-gOuAo8R-w2rWOpBJmT8/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvNGU3YmYxYWQ0/MTc5YTVkN2ViN2Qy/NDUxOWI3MWQzOGQ5/OTUzMTMwMjg0NzIw/NjUwYjMyZjUyMzc0/NjVkMjJmYS9hcnlu/ZXdzLnR2Lw",
+                    "path": "› gta-6-fans-can-now-add-the-game-to-xbox-wishlist"
+                },
+                "breaking": false,
+                "is_live": false,
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/aWHnJK5QKMFdxpNWTpvfrITgQzVI8xunNSdUWe0Ob1E/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9hcnlu/ZXdzLnR2L3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDI1LzA2L2V6/Z2lmLmNvbS1yZXNp/emUtMjAud2VicA",
+                    "original": "https://arynews.tv/wp-content/uploads/2025/06/ezgif.com-resize-20.webp"
+                },
+                "age": "2 days ago",
+                "extra_snippets": [
+                    "Xbox has added Rockstar Games’ Grand Theft Auto (GTA 6) to the online Store, a year before the game’s release. The hotly anticipated title in the",
+                    "The developer has confirmed that GTA 6 will be released for PlayStation 5 and Xbox Series X/S.",
+                    "Search for “Grand Theft Auto 6” using the Store’s search function. Select the right title from the game listing that pops up. Use the heart prompt to Wishlist the game and add it to your favorites within your Wishlist. ... ARY NEWS brings you 24/7 Live Streaming, Headlines, Bulletins, Talk Shows, Infotainment, and much more.",
+                    "Read more: Twitch CEO reveals why GTA 6 won’t hurt Grand Theft Auto 5 popularity"
+                ]
+            },
+            {
+                "title": "After GTA 6's Surprise Xbox Update, I'm More Hopeful A Demo Is Coming Soon",
+                "url": "https://screenrant.com/gta-6-xbox-update-wishlist-demo-next/",
+                "is_source_local": false,
+                "is_source_both": false,
+                "description": "The availability of notifications related to <strong>GTA</strong> <strong>6</strong>&#x27;s current status will be a much clearer way for fans to follow the sequel&#x27;s progress toward release. This could include notifications for new trailers, gameplay information, developer reports, etc.",
+                "page_age": "2025-06-28T00:10:03",
+                "profile": {
+                    "name": "Screenrant",
+                    "url": "screenrant.com",
+                    "long_name": "screenrant.com",
+                    "img": "https://imgs.search.brave.com/CkgFbungWnsi90fVgrGFPv3-uaqeUtDlDIk-Ycspzwo/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvNjdjMmFlMDI2/NWE1MzRhZGU0ZDYy/ZGM4NzkzN2Y5MmVj/MzRiYjVlYmM3ZDM2/ZTRhMzY2NGE4Yjgw/MjZjMWVhZC9zY3Jl/ZW5yYW50LmNvbS8"
+                },
+                "family_friendly": true,
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "screenrant.com",
+                    "hostname": "screenrant.com",
+                    "favicon": "https://imgs.search.brave.com/CkgFbungWnsi90fVgrGFPv3-uaqeUtDlDIk-Ycspzwo/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvNjdjMmFlMDI2/NWE1MzRhZGU0ZDYy/ZGM4NzkzN2Y5MmVj/MzRiYjVlYmM3ZDM2/ZTRhMzY2NGE4Yjgw/MjZjMWVhZC9zY3Jl/ZW5yYW50LmNvbS8",
+                    "path": "› gta-6-xbox-update-wishlist-demo-next"
+                },
+                "breaking": false,
+                "is_live": false,
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/JIpY7lovGNRoTVZEa-wR98QfojkUo3pag2MsZVjSn7A/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMxLnNyY2RuLmNv/bS93b3JkcHJlc3Mv/d3AtY29udGVudC91/cGxvYWRzLzIwMjUv/MDYvYWZ0ZXItZ3Rh/LTYtcy1zdXJwcmlz/ZS14Ym94LXVwZGF0/ZS1pLW0tbW9yZS1o/b3BlZnVsLWEtZGVt/by1pcy1jb21pbmct/c29vbl8uanBn",
+                    "original": "https://static1.srcdn.com/wordpress/wp-content/uploads/2025/06/after-gta-6-s-surprise-xbox-update-i-m-more-hopeful-a-demo-is-coming-soon_.jpg"
+                },
+                "age": "2 days ago",
+                "extra_snippets": [
+                    "The Wishlist update implies that Rockstar is ready to start revealing more details about GTA 6, but it's unclear when that will start taking place. More notifications from the Wishlist could also mean additional news or content, from revealed game modes to more information about GTA 6's story.",
+                    "The ability to Wishlist GTA 6 implies that more information regarding the game will become available over the coming months for players to take notice of.",
+                    "It's still almost a whole year until GTA 6 comes out, but the Wishlist Xbox update could mean that developer Rockstar Games has more information to share about the game soon.",
+                    "Grand Theft Auto 6 now has an official release date, but through an Xbox update, players might be able to experience the game earlier than expected."
+                ]
+            }
+        ],
+        "mutated_by_goggles": false
+    },
+    "type": "search",
+    "videos": {
+        "type": "videos",
+        "results": [
+            {
+                "type": "video_result",
+                "url": "https://www.youtube.com/watch?v=gMTWWjCWYLs",
+                "title": "GTA 6 Trailer 3 & Gameplay Details: Release Date, Preorders, and ...",
+                "description": "GTA 6 Trailer 3 & Gameplay Details: Release Date, Preorders, and LeaksPlz Help Me Get To 50k Subscribers!! 😊Thanks for watching!If you liked this video plea...",
+                "age": "6 days ago",
+                "page_age": "2025-06-24T13:44:25",
+                "video": {
+                    "duration": "06:25",
+                    "creator": "Ziberia X Gaming",
+                    "publisher": "YouTube"
+                },
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "youtube.com",
+                    "hostname": "www.youtube.com",
+                    "favicon": "https://imgs.search.brave.com/Wg4wjE5SHAargkzePU3eSLmWgVz84BEZk1SjSglJK_U/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvOTkyZTZiMWU3/YzU3Nzc5YjExYzUy/N2VhZTIxOWNlYjM5/ZGVjN2MyZDY4Nzdh/ZDYzMTYxNmI5N2Rk/Y2Q3N2FkNy93d3cu/eW91dHViZS5jb20v",
+                    "path": "› watch"
+                },
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/5d1IlZLjmt4eTJ4cHiuvYHFnsl7VfJCYece5IobDmMA/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9pLnl0/aW1nLmNvbS92aS9n/TVRXV2pDV1lMcy9t/YXhyZXNkZWZhdWx0/LmpwZw",
+                    "original": "https://i.ytimg.com/vi/gMTWWjCWYLs/maxresdefault.jpg"
+                }
+            },
+            {
+                "type": "video_result",
+                "url": "https://www.youtube.com/watch?v=3JYQnejgc2E",
+                "title": "GTA 6 NEWS: Rockstar Preparing for Marketing Cycle! (Pre Order ...",
+                "description": "LIMITED EDITION \"FIFTY\" MERCH!: https://cyberboi.co.uk/Only 100 of each! WORLDWIDE SHIPPING!Looking for accessories?: https://www.venomuk.com/all-productsUse",
+                "age": "1 week ago",
+                "page_age": "2025-06-21T22:08:06",
+                "video": {
+                    "duration": "03:54",
+                    "creator": "CYBER BOI",
+                    "publisher": "YouTube"
+                },
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "youtube.com",
+                    "hostname": "www.youtube.com",
+                    "favicon": "https://imgs.search.brave.com/Wg4wjE5SHAargkzePU3eSLmWgVz84BEZk1SjSglJK_U/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvOTkyZTZiMWU3/YzU3Nzc5YjExYzUy/N2VhZTIxOWNlYjM5/ZGVjN2MyZDY4Nzdh/ZDYzMTYxNmI5N2Rk/Y2Q3N2FkNy93d3cu/eW91dHViZS5jb20v",
+                    "path": "› watch"
+                },
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/gqboPMi6948zXyUuZRSWfymEk8MeCngxEKF_4DluNvs/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9pLnl0/aW1nLmNvbS92aS8z/SllRbmVqZ2MyRS9t/YXhyZXNkZWZhdWx0/LmpwZw",
+                    "original": "https://i.ytimg.com/vi/3JYQnejgc2E/maxresdefault.jpg"
+                }
+            },
+            {
+                "type": "video_result",
+                "url": "https://www.youtube.com/watch?v=ow-vBCj7_Ys",
+                "title": "50+ GTA 6 Details You May Have MISSED in Trailer 2! - YouTube",
+                "description": "JOIN THE DISCORD: https://discord.gg/YYTyW369SMLooking for accessories?: https://www.venomuk.com/all-productsUse Code CYBERBOI for FREE shipping at checkout",
+                "age": "May 25, 2025",
+                "page_age": "2025-05-25T19:18:34",
+                "video": {
+                    "duration": "08:05",
+                    "creator": "CYBER BOI",
+                    "publisher": "YouTube"
+                },
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "youtube.com",
+                    "hostname": "www.youtube.com",
+                    "favicon": "https://imgs.search.brave.com/Wg4wjE5SHAargkzePU3eSLmWgVz84BEZk1SjSglJK_U/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvOTkyZTZiMWU3/YzU3Nzc5YjExYzUy/N2VhZTIxOWNlYjM5/ZGVjN2MyZDY4Nzdh/ZDYzMTYxNmI5N2Rk/Y2Q3N2FkNy93d3cu/eW91dHViZS5jb20v",
+                    "path": "› watch"
+                },
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/MfiKuwNRmAqxXsHd1pzssgUC6CpbUPI3Vk8piNBZoi8/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9pLnl0/aW1nLmNvbS92aS9v/dy12QkNqN19Zcy9t/YXhyZXNkZWZhdWx0/LmpwZw",
+                    "original": "https://i.ytimg.com/vi/ow-vBCj7_Ys/maxresdefault.jpg"
+                }
+            },
+            {
+                "type": "video_result",
+                "url": "https://www.youtube.com/watch?v=76n2roLeDAw",
+                "title": "I spent 100 hours researching GTA 6. Heres what I found. - YouTube",
+                "description": "Want to know everything there is to know about GTA6 all in one place? Using the big GTA6 Leak in 2022 and other sources like the Take Two earnings call we wi...",
+                "age": "January 10, 2025",
+                "page_age": "2025-01-10T12:00:05",
+                "video": {
+                    "duration": "15:54",
+                    "views": 482329,
+                    "creator": "Sav",
+                    "publisher": "YouTube"
+                },
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "youtube.com",
+                    "hostname": "www.youtube.com",
+                    "favicon": "https://imgs.search.brave.com/Wg4wjE5SHAargkzePU3eSLmWgVz84BEZk1SjSglJK_U/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvOTkyZTZiMWU3/YzU3Nzc5YjExYzUy/N2VhZTIxOWNlYjM5/ZGVjN2MyZDY4Nzdh/ZDYzMTYxNmI5N2Rk/Y2Q3N2FkNy93d3cu/eW91dHViZS5jb20v",
+                    "path": "› watch"
+                },
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/yoCT-7dOH7pZzNuQ7QOfGrMo1eGCzfDbcx03TS3qmJE/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9pLnl0/aW1nLmNvbS92aS83/Nm4ycm9MZURBdy9t/YXhyZXNkZWZhdWx0/LmpwZw",
+                    "original": "https://i.ytimg.com/vi/76n2roLeDAw/maxresdefault.jpg"
+                }
+            },
+            {
+                "type": "video_result",
+                "url": "https://www.youtube.com/watch?v=DzmW6lhjsYQ",
+                "title": "GTA 6 Official Gameplay is HERE! - YouTube",
+                "description": "GTA 6 isn’t just a game, it’s a revolution. From canceled storylines and gritty reboots to wild missions and next-gen tech, this deep-dive unpacks everything...",
+                "age": "2 weeks ago",
+                "page_age": "2025-06-18T00:07:18",
+                "video": {
+                    "duration": "08:03",
+                    "creator": "GTA Central",
+                    "publisher": "YouTube"
+                },
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "youtube.com",
+                    "hostname": "www.youtube.com",
+                    "favicon": "https://imgs.search.brave.com/Wg4wjE5SHAargkzePU3eSLmWgVz84BEZk1SjSglJK_U/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvOTkyZTZiMWU3/YzU3Nzc5YjExYzUy/N2VhZTIxOWNlYjM5/ZGVjN2MyZDY4Nzdh/ZDYzMTYxNmI5N2Rk/Y2Q3N2FkNy93d3cu/eW91dHViZS5jb20v",
+                    "path": "› watch"
+                },
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/JSOZT2qUK7ir8J8qjEvVhKz_CZ19apbUBkZn-taGsf0/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9pLnl0/aW1nLmNvbS92aS9E/em1XNmxoanNZUS9t/YXhyZXNkZWZhdWx0/LmpwZw",
+                    "original": "https://i.ytimg.com/vi/DzmW6lhjsYQ/maxresdefault.jpg"
+                }
+            }
+        ],
+        "mutated_by_goggles": false
+    },
+    "web": {
+        "type": "search",
+        "results": [
+            {
+                "title": "GTA 6 Info (@GTASixInfo) / X",
+                "url": "https://x.com/gtasixinfo?lang=en",
+                "is_source_local": false,
+                "is_source_both": false,
+                "description": "We cannot provide a description for this page right now",
+                "page_age": "2025-05-06T13:20:06",
+                "profile": {
+                    "name": "X",
+                    "url": "https://x.com/gtasixinfo?lang=en",
+                    "long_name": "x.com",
+                    "img": "https://imgs.search.brave.com/VpOsyUaQQGp5MT_drqEzgpxdO8o12jax0jeq0Vojuto/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvMmQzM2JiZDhi/OWVhNGYxZmRkNDli/NzAxODUzMzFhYTNm/ODcxNmE4ZGQ5OTE3/MWU4OGZjNDQyZDdh/NzQ4MWE4YS94LmNv/bS8"
+                },
+                "language": "en",
+                "family_friendly": true,
+                "type": "search_result",
+                "subtype": "generic",
+                "is_live": false,
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "x.com",
+                    "hostname": "x.com",
+                    "favicon": "https://imgs.search.brave.com/VpOsyUaQQGp5MT_drqEzgpxdO8o12jax0jeq0Vojuto/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvMmQzM2JiZDhi/OWVhNGYxZmRkNDli/NzAxODUzMzFhYTNm/ODcxNmE4ZGQ5OTE3/MWU4OGZjNDQyZDdh/NzQ4MWE4YS94LmNv/bS8",
+                    "path": "› gtasixinfo"
+                },
+                "age": "May 6, 2025"
+            },
+            {
+                "title": "GTA 6: Everything we know so far | GamesRadar+",
+                "url": "https://www.gamesradar.com/gta-6-guide/",
+                "is_source_local": false,
+                "is_source_both": false,
+                "description": "GTA 6 is <strong>coming in 2026</strong>. Here&#x27;s the latest news and updates on Rockstar&#x27;s upcoming open-world epic",
+                "page_age": "2025-06-12T00:00:00",
+                "profile": {
+                    "name": "GamesRadar+",
+                    "url": "https://www.gamesradar.com/gta-6-guide/",
+                    "long_name": "gamesradar.com",
+                    "img": "https://imgs.search.brave.com/oAZyq6jtSuB6fbwxFGu2SIEw9JjqactgViHAuwzYEOM/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvM2IzYWFlNTU3/OWMzNjg1NDY0OGQz/NjFhZWQ3NTQ2ODkx/ZDg3NWU5NmZlMWIy/YWYyYjdmOGMyMTZi/ZWE2NDg3My93d3cu/Z2FtZXNyYWRhci5j/b20v"
+                },
+                "language": "en",
+                "family_friendly": true,
+                "type": "search_result",
+                "subtype": "article",
+                "is_live": false,
+                "meta_url": {
+                    "scheme": "https",
+                    "netloc": "gamesradar.com",
+                    "hostname": "www.gamesradar.com",
+                    "favicon": "https://imgs.search.brave.com/oAZyq6jtSuB6fbwxFGu2SIEw9JjqactgViHAuwzYEOM/rs:fit:32:32:1:0/g:ce/aHR0cDovL2Zhdmlj/b25zLnNlYXJjaC5i/cmF2ZS5jb20vaWNv/bnMvM2IzYWFlNTU3/OWMzNjg1NDY0OGQz/NjFhZWQ3NTQ2ODkx/ZDg3NWU5NmZlMWIy/YWYyYjdmOGMyMTZi/ZWE2NDg3My93d3cu/Z2FtZXNyYWRhci5j/b20v",
+                    "path": "  › action games  › gta 6"
+                },
+                "thumbnail": {
+                    "src": "https://imgs.search.brave.com/lqpSnwbDzATRCKjHosnCqUqVjjixNehu_ipw_QNP-pg/rs:fit:200:200:1:0/g:ce/aHR0cHM6Ly9jZG4u/bW9zLmNtcy5mdXR1/cmVjZG4ubmV0L2lQ/aTNiRkZnU2ZMbm9O/ZThOUzc2NG4uanBn",
+                    "original": "https://cdn.mos.cms.futurecdn.net/iPi3bFFgSfLnoNe8NS764n.jpg",
+                    "logo": false
+                },
+                "age": "3 weeks ago",
+                "extra_snippets": [
+                    "Following the drop of the second GTA 6 trailer, Rockstar released a detailed overview of some of the key GTA 6 characters we'll be meeting in Leonida on its official website. With some more background information on the dual protagonists of GTA 6 - Jason Duval and Lucia Caminos - who were first introduced to in the first official trailer, we now know that Lucia grew up in Liberty City and dreams of the \"good life\" in Leonida.",
+                    "Are you wondering whether the GTA 6 leaks are real? Well, Rockstar has since issued a statement confirming the hack: \"We recently suffered a network intrusion in which an unauthorized third party illegally accessed and downloaded confidential information from our systems, including early development footage for the next Grand Theft Auto.\"",
+                    "GTA 6 is coming in 2026. Here's the latest news and updates on Rockstar's upcoming open-world epic",
+                    "GTA 6 officially has a release date and will be landing in 2026"
+                ]
+            }
+        ],
+        "family_friendly": true
+    }
+}
