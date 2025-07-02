@@ -26,28 +26,33 @@ tab = None
 def cleanse_brave_search(response):
     cleansed_result = {}
     i = 0
-    try:
+    if response.get('news'):
         for result in response['news']['results']:
-            try:
+            if result.get('extra_snippets'):
                 for snippet in result['extra_snippets']:
                     cleansed_result[f'result_{i}'] = snippet
                     i += 1
-            except:
+            elif result.get('description'):
                 cleansed_result[f'result_{i}'] = result['description']
                 i += 1
-    except:
+    else:
         cleansed_result = {}
-    for result in response['web']['results']:
-        try:
-            for snippet in result['extra_snippets']:
-                cleansed_result[f'result_{i}'] = snippet
+    if response.get('web'):
+        for result in response['web']['results']:
+            if result.get('extra_snippets'):
+                for snippet in result['extra_snippets']:
+                    cleansed_result[f'result_{i}'] = snippet
+                    i += 1
+            elif result.get('description'):
+                cleansed_result[f'result_{i}'] = result['description']
                 i += 1
-        except:
-            cleansed_result[f'result_{i}'] = result['description']
-            i += 1
+    else:
+        if len(cleansed_result) == 0:
+            return response
+
     return cleansed_result
 
-def brave_search(query: str, count: int = 2):
+def brave_search(query: str, count: int = 20):
     url = "https://api.search.brave.com/res/v1/web/search"
     headers = {
         "Accept": "application/json",

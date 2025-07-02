@@ -83,7 +83,7 @@ class AnthropicAPI:
 class OllamaAPI:
     def __init__(self):
         self.model = 'jarvis-qwen3:latest'
-        self.context_len = 8000
+        self.context_len = 40000
         self.response_limit = self.context_len // 4
         self.tool_use_id_counter = 0
         load_result = {'done': False}
@@ -253,11 +253,6 @@ class MCPClient:
             })
             tool_calls = response['tool_calls']
             num_tool_calls_left = len(tool_calls)
-
-            messages.append({
-                'role': 'assistant',
-                'content': llm_response
-            })
 
         return_object = {
             'history': messages,
