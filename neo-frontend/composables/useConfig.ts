@@ -5,7 +5,7 @@ import { ref } from 'vue'
 const llm = ref('claude')
 const ttsEngine = ref('server')
 const ttsVoice = ref('jarvis')
-const ttsSpeed = ref(1.0)
+const ttsSpeed = ref(1.10)
 const assistantName = ref('Jarvis')
 const callNameInterval = ref(15)
 const micMuted = ref(true)

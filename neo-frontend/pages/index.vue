@@ -100,7 +100,7 @@ const statusConfig = computed<{
   }
 })
 
-const ttsListeningDelay = 5000; // in milliseconds
+const ttsListeningDelay = 1000; // in milliseconds
 const value = ref("");
 const connectionStatus = ref(serverStatus.CONNECTING);
 const gettingResponse = ref(false);
