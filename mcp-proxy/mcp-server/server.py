@@ -70,7 +70,7 @@ def brave_search(query: str, count: int = 20):
 
 @mcp.tool()
 async def search_the_internet(query: str) -> str:
-    """Search the internet for information with a given query.
+    """Search the internet for information with a given query. Only use if you don't know the answer.
     
     Args:
         query: Search query to look up.

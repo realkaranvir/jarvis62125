@@ -6,8 +6,12 @@ class AnthropicAPI:
         self.context_len = 128000
         self.response_limit = self.context_len // 20
 
-    def query_llm(self, messages: list, tools: list, system_prompt: str):
+    def query_llm(self, messages: list, tools: list):
         """Query the Anthropic LLM with given messages and tools"""
+
+        NAME = "Jarvis"
+        SYSTEM_PROMPT = f"Your name is {NAME}. You are a formal, concise assistant who always refers to the user as sir. You answer in no more than two sentences. Do not ask follow-up questions unless absolutely necessary to understand the current query. Do not offer additional information, suggestions, or clarifications unless directly requested. You are helpful but reserved. If a question cannot be answered without more information, state that clearly and wait for further input. You have access to tools, but you will only use them when the question cannot be answered directly."
+        
         # Structure tools for Anthropic API
         available_tools = [{
             "name": tool.name,
@@ -20,7 +24,7 @@ class AnthropicAPI:
             max_tokens=1000,
             messages=messages,
             tools=available_tools,
-            system=system_prompt
+            system=SYSTEM_PROMPT
         )
         tool_calls = []
         llm_response = ""

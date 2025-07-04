@@ -3,7 +3,7 @@
 # response_limit: int
 # context_len: int
 
-# def query_llm(self, messages: list, tools: list, system_prompt: str): 
+# def query_llm(self, messages: list, tools: list): 
     # returns:
         #    {
         #        "llm_response": "<string>", 

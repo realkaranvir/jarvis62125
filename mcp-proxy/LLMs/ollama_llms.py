@@ -19,7 +19,7 @@ class OllamaAPI:
         if (load_result['done'] != True):
             print(f'Error loading model: {self.model}')
 
-    def query_llm(self, messages: list, tools: list, system_prompt: str):
+    def query_llm(self, messages: list, tools: list):
         """Query the local ollama LLM with given messages and tools"""
         self.tool_use_id_counter += 1
         if self.tool_use_id_counter > 10000:
