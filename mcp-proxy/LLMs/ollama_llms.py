@@ -3,7 +3,7 @@ import utils
 
 class OllamaAPI:
     def __init__(self):
-        self.model = 'jarvis-qwen3:latest'
+        self.model = 'jarvis4-qwen:latest'
         self.context_len = 40000
         self.response_limit = self.context_len // 4
         self.tool_use_id_counter = 0
@@ -32,9 +32,9 @@ class OllamaAPI:
                 'name': tool.name,
                 'description': tool.description,
                 'parameters': {
-                    'type': tool.inputSchema['type'],
-                    'required': tool.inputSchema['required'],
-                    'properties': tool.inputSchema['properties']
+                    'type': tool.inputSchema.get('type', ''),
+                    'required': tool.inputSchema.get('required', []),
+                    'properties': tool.inputSchema.get('properties', '')
                 }
             }
         } for tool in tools]
@@ -46,7 +46,7 @@ class OllamaAPI:
             tool_calls = [{'name': tool.function.name, 'args': tool.function.arguments, 'tool_use_id': str(self.tool_use_id_counter) } for tool in response.message.tool_calls]
         # Sometimes model returns tool call in content message
         if response.message.content and response.message.content[:13] == 'type=tool_use':
-            info = utils.parse_tool_string()
+            info = utils.parse_tool_string(response.message.content)
             tool_calls.append({'name': info['name'], 'args': info['input'], 'tool_use_id': info['id']})
         else:
             llm_response = response.message.content

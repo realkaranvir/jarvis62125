@@ -70,13 +70,13 @@ def brave_search(query: str, count: int = 20):
 
 @mcp.tool()
 async def search_the_internet(query: str) -> str:
-    """Search the internet for information with a given query. Only use if you don't know the answer.
+    """Search the internet for information with a given query. Only use if you don't know the answer
     
     Args:
-        query: Search query to look up.
+        query: Search query to look up
     
     Returns:
-        Extracted information from the search results or error message.
+        Extracted information from the search results or error message
     """
     try:
         search_results = None
@@ -84,25 +84,49 @@ async def search_the_internet(query: str) -> str:
         return search_results
     except Exception as e:
         return f"An error occurred: {str(e)}"
+    
+@mcp.tool()
+async def list_obsidian_projects() -> str:
+    """Lists the obsidian projects under ~/jarvis_data/obsidian_projects
+
+    Args:
+
+    Returns:
+        List of Obsidian projects or error message
+    """
+    base_path = os.path.expanduser("~/jarvis_data/obsidian_projects")
+
+    if not os.path.exists(base_path):
+        return "Error: Obsidian project directory doesn't exist."
+
+    projects = [
+        name for name in os.listdir(base_path)
+        if os.path.isdir(os.path.join(base_path, name)) and name[0] != "."
+    ]
+
+    if not projects:
+        return "No Obsidian projects found."
+    else:
+        return "\n".join(projects)
 
 @mcp.tool()
-async def execute_command(command: str) -> str:
-    """Execute a command in the unix/linux terminal. Ensure to only run commands that won't return super long outputs.
+async def create_obsidian_project(project_name: str) -> str:
+    """Creates a new Obsidian project folder under ~/jarvis_data/obsidian_projects. Make sure to check if the project already exists first by calling list_obsidian_projects()
     
     Args:
-        command: The command to execute.
-    
+        project_name: Name of the project folder. Format the user's input into snake_case when passing in.
+
     Returns:
-        The output of the command or an error message.
+        The result of the operation (success or failure)
     """
+    base_path = os.path.expanduser("~/jarvis_data/obsidian_projects")
+    vault_path = os.path.join(base_path, project_name)
+
     try:
-        import subprocess
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
-        if result.returncode != 0:
-            return f"Error executing command: {result.stderr.strip()}"
-        return result.stdout.strip()
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
+        os.makedirs(vault_path, exist_ok=False)
+        return f"Created new Obsidian vault: {vault_path}"
+    except FileExistsError:
+        return f"Project '{project_name}' already exists."
 
 if __name__ == "__main__":
     mcp.run()

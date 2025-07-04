@@ -5,3 +5,4 @@ tts/models/*
 node_modules
 *.idea
 *.idea/*
+data
