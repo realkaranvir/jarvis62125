@@ -50,6 +50,7 @@ class MCPClient:
                 "role": "user",
                 "content": query
         })
+        history = messages.copy() # Create a copy of messages to send back to client (without tool results)
         # List available tools for the LLMeturn
         available_tools = (await self.session.list_tools()).tools
 
@@ -61,10 +62,13 @@ class MCPClient:
 
         llm_response = response['llm_response']
 
-        messages.append({
-            'role': 'assistant',
-            'content': llm_response
-        })
+        if (llm_response):
+            temp = {
+                'role': 'assistant',
+                'content': llm_response
+            }
+            messages.append(temp)
+            history.append(temp)
 
         tool_calls = response['tool_calls']
         num_tool_calls_left = len(tool_calls)
@@ -81,6 +85,10 @@ class MCPClient:
                 tool_result = self.llm.format_tool_result(tool_use_id, utils.cap_start(result.content[0].text, self.llm.response_limit))
 
                 messages.extend([tool_call, tool_result])
+                history.append({
+                'role': 'user',
+                'content': f'Tool called: {tool_name}'
+            })
                 num_tool_calls_left -= 1
 
             response = self.llm.query_llm(
@@ -89,15 +97,18 @@ class MCPClient:
             )
 
             llm_response = response['llm_response']
-            messages.append({
+            
+            temp = {
                 'role': 'assistant',
                 'content': llm_response
-            })
+            }
+            messages.append(temp)
+            history.append(temp)
             tool_calls = response['tool_calls']
             num_tool_calls_left = len(tool_calls)
 
         return_object = {
-            'history': messages,
+            'history': history,
             'LLM_response': llm_response
         }
         return return_object

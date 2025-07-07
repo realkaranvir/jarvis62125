@@ -4,24 +4,81 @@
     "type": "split",
     "children": [
       {
-        "id": "f988fa69356faed7",
+        "id": "29413cd7dd658798",
         "type": "tabs",
         "children": [
           {
-            "id": "72ed5f6427b951c5",
+            "id": "da48638071e3d718",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Running All Services.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Running All Services"
+            }
+          },
+          {
+            "id": "b57343531cf145b2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Speech To Text (STT).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Speech To Text (STT)"
+            }
+          },
+          {
+            "id": "2c074a7166a83db6",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
                 "file": "Text To Speech (TTS).md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "Text To Speech (TTS)"
             }
+          },
+          {
+            "id": "8117be2c3f26a92e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "MCP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "MCP"
+            }
+          },
+          {
+            "id": "8ebb45d16c668e79",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Todo.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Todo"
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -163,15 +220,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "72ed5f6427b951c5",
+  "active": "8ebb45d16c668e79",
   "lastOpenFiles": [
+    "MCP.md",
+    "Requirements.md",
+    "Running All Services.md",
     "Speech To Text (STT).md",
     "Text To Speech (TTS).md",
-    "Untitled",
-    "MCP.md",
-    "Running All Services.md",
     "Todo.md",
-    "Requirements.md",
     "VPN (ZeroTier).md",
     "Frontend (Vue).md"
   ]

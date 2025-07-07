@@ -1,13 +1,16 @@
 
 - fine-tune ollama model selection for jarvis, tool use, formatting
 	- potentially use another model for formatting the final output. wouldn't have to worry about tool use
+- Code Jarvis to my voice
+	- Allow user to code to their own voice
+- frontend should output as markdown
+- tts engine should format input (remove markdown features)
 - frontend cannot splice in between tool use and call segments (anthropic api freaks out)
 	- need to figure out a way to trim history? i think the ai might already do it though.
 - ollama create new models for new names?
 - Make proxy for back end services
 	- Abstract away transcription behind proxy so front end doesn't have to worry about routing
 		- Front end should only send inputs to the proxy (audio, text, images, etc.)
-- [[Speech To Text (STT)]] needs to be just faster-whisper server
 - Servers need to be converted to docker containers
 	- [[Text To Speech (TTS)]]
 	- [[Speech To Text (STT)]]
