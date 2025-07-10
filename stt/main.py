@@ -7,8 +7,13 @@ app = Quart(__name__)
 app = cors(app, allow_origin="*") # TODO: change later
 
 device_type = "cuda" if (torch.cuda.is_available()) else "cpu"
-compute_type = "float16" if (device_type == "cuda") else "int8"
-default_model_size = "tiny"
+compute_type = "int8" if (device_type == "cuda") else "int8"
+default_model_size = "large-v2" if (device_type == "cuda") else "tiny"
+
+print("Initializing TTS:")
+print(f"Device Type: {device_type}")
+print(f"Compute Type: {compute_type}")
+print(f"Model Size: {default_model_size}")
 
 model = WhisperModel(default_model_size, device=device_type, compute_type=compute_type)
 
