@@ -7,13 +7,14 @@ app = Quart(__name__)
 app = cors(app, allow_origin="*") # TODO: change later
 
 device_type = "cuda" if (torch.cuda.is_available()) else "cpu"
+compute_type = "float16" if (device_type == "cuda") else "int8"
 default_model_size = "tiny"
 
-model = WhisperModel(default_model_size, device=device_type, compute_type="float16")
+model = WhisperModel(default_model_size, device=device_type, compute_type=compute_type)
 
 def load_model(model_size):
     # Run on GPU with FP16
-    model = WhisperModel(model_size, device=device_type, compute_type="float16")
+    model = WhisperModel(model_size, device=device_type, compute_type=compute_type)
 
 def transcribe_wav_file(wav_file):
     segments, info = model.transcribe(wav_file, beam_size=5)

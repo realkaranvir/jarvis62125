@@ -122,8 +122,6 @@ async function startMicVAD() {
   try {
     myvad = await MicVAD.new({
       onSpeechEnd: (audio) => {
-        console.log("Speech Ended");
-        console.log(audio);
         const wavBuffer = utils.encodeWAV(audio);
         const audioBlob = new Blob([wavBuffer], { type: "audio/wav" });
         currentAudioBlob.value = audioBlob;
@@ -228,6 +226,7 @@ async function submitAudio(audioBlob: Blob | null) {
   listening.value = false; // Stop listening while processing audio
   gettingResponse.value = true; // Show loading state
   const formData = new FormData();
+
   if (audioBlob) {
     formData.append("file", audioBlob, "audio.wav");
   } else {
@@ -235,7 +234,9 @@ async function submitAudio(audioBlob: Blob | null) {
     return;
   }
 
-  const res = await fetch("http://localhost:5001/transcribe", {
+  formData.append("history", JSON.stringify(history.value));
+
+  const res = await fetch("http://localhost:5002/proxy/audio-query", {
     method: "POST",
     body: formData,
   });
@@ -244,34 +245,16 @@ async function submitAudio(audioBlob: Blob | null) {
     throw new Error("Transcription failed");
   }
   const data = await res.json();
-  const transcription = data.transcription;
-
-  console.log("Transcription:", transcription);
-
-  // If the call name interval is 0, the user needs to call the assistant's name again
-  if ((callNameInterval.value == 0 && !transcription.toLowerCase().includes(assistantName.value.toLowerCase())) || transcription.length < 1) {
-    listening.value = true; // Reset listening state
-    return;
-  }
-  // Send the query to the server
-  try {
-    const res = await sendQuery(transcription);
-    if (!res) {
-      listening.value = true; // Reset listening state if no response
-      return;
-    }
-    response.value = res.response.LLM_response;
-  } catch (error) {
-    listening.value = true; // Reset listening state if there's an error
-    response.value = `${assistantName} is malfunctioning.`;
-  }
+  response.value = data.response.LLM_response;
+  history.value = data.response.history;
   gettingResponse.value = false;
+  listening.value = true;
 }
 
 // Check connection to the server
 async function handleConnect() {
   try {
-    const response = await fetch("http://127.0.0.1:5000/health", {
+    const response = await fetch("http://localhost:5002/proxy/health", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -298,13 +281,14 @@ async function sendQuery(query: string) {
     // Stop listening while sending query and speaking response to avoid feedback loops
     listening.value = false;
 
+    const formData = new FormData();
+    formData.append("history", JSON.stringify(history.value));
+    formData.append("query", query);
+
     // Send query and history to the server
-    const response = await fetch("http://127.0.0.1:5000/query", {
+    const response = await fetch("http://localhost:5002/proxy/text-query", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ query: query, history: history.value }),
+      body: formData,
     });
     const res = await response.json();
 
