@@ -4,8 +4,9 @@
       <UButton label="Settings" color="neutral" variant="subtle" trailing-icon="mdi-light:chevron-up" />
       <template #content>
         <UContainer class="flex justify-center items-center min-h-64">
-          <UButton :icon="micOn ? 'mdi-light:microphone' : 'mdi-light:microphone-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleMic() }"/>
-          <UButton :icon="speakerOn ? 'mdi-light:volume' : 'mdi-light:volume-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleSpeaker() }"/>
+          <UButton :icon="micOn ? 'mdi-light:microphone' : 'mdi-light:microphone-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleMic() }" />
+          <UButton :icon="speakerOn ? 'mdi-light:volume' : 'mdi-light:volume-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleSpeaker() }" />
+          <UInput v-model="backendUrl" />
         </UContainer>
       </template>
     </UDrawer>
@@ -18,6 +19,7 @@ const micOn = ref(false);
 const speakerOn = ref(false);
 const response = ref([]);
 const history = ref([]);
+const backendUrl = ref("");
 let myvad = null;
 
 const toggleMic = () => {
@@ -83,7 +85,7 @@ const getTextResponseFromAudio = async (audioBlob) => {
   formData.append("use_tts", speakerOn.value ? "true" : "false");
 
   try {
-    const res = await fetch("http://localhost:5002/proxy/audio-query", {
+    const res = await fetch(`${backendUrl.value}/proxy/audio-query`, {
       method: "POST",
       body: formData,
     });

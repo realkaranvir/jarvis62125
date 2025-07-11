@@ -9,7 +9,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "predeploy": "npm run generate",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.56",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.5.2",
     "eslint": "^9.30.1",
+    "gh-pages": "^6.3.0",
     "typescript": "^5.8.3"
   }
 }

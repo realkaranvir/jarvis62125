@@ -15,5 +15,10 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
 
+  app: {
+    baseURL: '/jarvis62125/',
+    buildAssetsDir: 'assets',
+  },
+
   compatibilityDate: '2024-11-27'
 })
