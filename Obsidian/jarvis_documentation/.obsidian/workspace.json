@@ -1,0 +1,234 @@
+{
+  "main": {
+    "id": "ed7758b0f709f73a",
+    "type": "split",
+    "children": [
+      {
+        "id": "29413cd7dd658798",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "da48638071e3d718",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Running All Services.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Running All Services"
+            }
+          },
+          {
+            "id": "b57343531cf145b2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Speech To Text (STT).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Speech To Text (STT)"
+            }
+          },
+          {
+            "id": "2c074a7166a83db6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Text To Speech (TTS).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Text To Speech (TTS)"
+            }
+          },
+          {
+            "id": "8117be2c3f26a92e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "MCP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "MCP"
+            }
+          },
+          {
+            "id": "8ebb45d16c668e79",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Text To Speech (TTS).md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Text To Speech (TTS)"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ca04a106a79f2f64",
+    "type": "split",
+    "children": [
+      {
+        "id": "e692aa648160b329",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a1c284ade61384ab",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "6c94bda0f77448c9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "e824a0409c947b02",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ff83bf07c2b8f876",
+    "type": "split",
+    "children": [
+      {
+        "id": "4da7a35cb1627976",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "128ac9856f69e285",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Text To Speech (TTS).md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Text To Speech (TTS)"
+            }
+          },
+          {
+            "id": "d917bd1d4dfddfb1",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Text To Speech (TTS).md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Text To Speech (TTS)"
+            }
+          },
+          {
+            "id": "8e7600cedf8868c5",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a57e33c74f894c8f",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Text To Speech (TTS).md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Text To Speech (TTS)"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "8ebb45d16c668e79",
+  "lastOpenFiles": [
+    "Speech To Text (STT).md",
+    "MCP.md",
+    "Todo.md",
+    "Requirements.md",
+    "Running All Services.md",
+    "Text To Speech (TTS).md",
+    "VPN (ZeroTier).md",
+    "Frontend (Vue).md"
+  ]
+}
