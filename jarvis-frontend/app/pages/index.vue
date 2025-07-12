@@ -129,6 +129,7 @@ const getTextResponseFromAudio = async (audioBlob) => {
     const data = await res.json();
     const query = data.response.query;
     const llm_response = data.response.LLM_response;
+
     if (query && llm_response) {
       response.value.push({ role: "User", text: query });
       response.value.push({ role: "AI", text: llm_response });

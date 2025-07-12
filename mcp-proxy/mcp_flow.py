@@ -108,7 +108,7 @@ class MCPClient:
             num_tool_calls_left = len(tool_calls)
 
         return_object = {
-            'query:': query,
+            'query': query,
             'history': history,
             'LLM_response': llm_response,
         }
