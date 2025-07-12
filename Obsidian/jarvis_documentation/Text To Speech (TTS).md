@@ -19,6 +19,5 @@ mkdir models (place models here)
 ```
 cd tts
 source .venv/bin/activate
-cd models
-python -m piper.http_server --model jarvis/jarvis-high.onnx
+python -m piper.http_server --model models/jarvis/jarvis-high.onnx
 ```
