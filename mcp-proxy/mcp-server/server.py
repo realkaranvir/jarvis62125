@@ -119,6 +119,5 @@ async def search_the_internet(query: str) -> str:
         logging.debug(f"An error occurred: {str(e)}")
         return error
 
-
 if __name__ == "__main__":
     mcp.run()
