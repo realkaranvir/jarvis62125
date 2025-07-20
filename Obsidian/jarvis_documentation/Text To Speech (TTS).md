@@ -14,6 +14,7 @@ pip install piper-phonemize-cross
 cd ../../.. (go back to tts dir)
 mkdir models (place models here)
 ```
+Encountering problems with pip? Try removing `.venv/` and re-doing the steps.
 [Jarvis](https://huggingface.co/jgkawell/jarvis/tree/main/en/en_GB/jarvis/high)
 #### Running
 ```

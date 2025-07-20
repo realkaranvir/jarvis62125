@@ -7,8 +7,8 @@ app = Quart(__name__)
 app = cors(app, allow_origin="*") # TODO: change later
 
 device_type = "cuda" if (torch.cuda.is_available()) else "cpu"
-compute_type = "int8" if (device_type == "cuda") else "int8"
-default_model_size = "large-v2" if (device_type == "cuda") else "tiny"
+compute_type = "float16" if (device_type == "cuda") else "int8"
+default_model_size = "tiny" if (device_type == "cuda") else "tiny"
 
 print("Initializing TTS:")
 print(f"Device Type: {device_type}")
@@ -22,7 +22,7 @@ def load_model(model_size):
     model = WhisperModel(model_size, device=device_type, compute_type=compute_type)
 
 def transcribe_wav_file(wav_file):
-    segments, info = model.transcribe(wav_file, beam_size=5)
+    segments, info = model.transcribe(wav_file, beam_size=5, vad_filter=True, language="en", vad_parameters={"threshold": 0.6, "neg_threshold": 0.3})
     print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
     return segments
 

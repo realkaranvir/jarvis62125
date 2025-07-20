@@ -4,15 +4,28 @@ import requests
 import os
 import sys
 import signal
+import logging
+from datetime import datetime
 
 from mcp.server.fastmcp import FastMCP
 
 # Constants
-response_cap = 500 # in characters
+DATA_PATH = "~/jarvis_data"
+OBSIDIAN_BASE_PATH = "~/jarvis_data/obsidian_projects"
+LOG_FOLDER = "~/jarvis_data/logs"
+
 
 # Initializing server
 mcp = FastMCP()
 load_dotenv()
+log_dir = os.path.expanduser(LOG_FOLDER)
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, "err.log")
+logging.basicConfig(
+    filename=log_file,
+    level=logging.ERROR,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 # Handle SIGINT (Ctrl+C) gracefully
 def signal_handler(sig, frame):
@@ -20,8 +33,6 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
-browser = None
-tab = None
 
 def cleanse_brave_search(response):
     cleansed_result = {}
@@ -51,6 +62,27 @@ def cleanse_brave_search(response):
             return response
 
     return cleansed_result
+
+def safe_join(base_dir: str, user_input_path: str) -> str:
+    """
+    Safely join base_dir with user_input_path to prevent directory traversal.
+    
+    Returns the absolute safe path if valid, or raises a ValueError if invalid.
+    """
+    # Expand ~ to home directory
+    base_dir = os.path.expanduser(base_dir)
+    user_input_path = os.path.expanduser(user_input_path)
+
+    # Join and normalize
+    full_path = os.path.abspath(os.path.join(base_dir, user_input_path))
+
+    # Normalize base_dir after expansion
+    base_dir = os.path.abspath(base_dir)
+    if not full_path.startswith(base_dir + os.sep):
+        raise ValueError("Invalid path: attempting to access outside of base directory.")
+
+    return full_path
+
 
 def brave_search(query: str, count: int = 20):
     url = "https://api.search.brave.com/res/v1/web/search"
@@ -83,76 +115,9 @@ async def search_the_internet(query: str) -> str:
         search_results = brave_search(query)
         return search_results
     except Exception as e:
-        return f"An error occurred: {str(e)}"
-    
-@mcp.tool()
-async def list_obsidian_projects() -> str:
-    """Lists the obsidian projects under ~/jarvis_data/obsidian_projects
-
-    Args:
-
-    Returns:
-        List of Obsidian projects or error message
-    """
-    base_path = os.path.expanduser("~/jarvis_data/obsidian_projects")
-
-    if not os.path.exists(base_path):
-        return "Error: Obsidian project directory doesn't exist."
-
-    projects = [
-        name for name in os.listdir(base_path)
-        if os.path.isdir(os.path.join(base_path, name)) and name[0] != "."
-    ]
-
-    if not projects:
-        return "No Obsidian projects found."
-    else:
-        return "\n".join(projects)
-
-@mcp.tool()
-async def create_obsidian_project(project_name: str) -> str:
-    """Creates a new Obsidian project folder under ~/jarvis_data/obsidian_projects. Make sure to check if the project already exists first by calling list_obsidian_projects().
-    
-    Args:
-        project_name: Name of the project folder. Format the user's input into snake_case when passing in.
-
-    Returns:
-        The result of the operation (success or failure)
-    """
-    base_path = os.path.expanduser("~/jarvis_data/obsidian_projects")
-    vault_path = os.path.join(base_path, project_name)
-
-    try:
-        os.makedirs(vault_path, exist_ok=False)
-        return f"Created new Obsidian vault: {vault_path}"
-    except FileExistsError:
-        return f"Project '{project_name}' already exists."
-
-@mcp.tool()
-async def create_new_file_in_obsidian_project(project_name:str, file_name: str):
-    """Creates a new file within the given Obsidian project. Make sure to check if the project already exists and its name by first calling list_obsidian_projects().
-    
-    Args:
-        project_name: Name of the project folder.
-        file_name: Name of the new file to create. Ask the user for the filename beforehand and format using Title Case.
-
-    Returns:
-        The result of the operation (success or failure)
-    """
-    base_path = os.path.expanduser("~/jarvis_data/obsidian_projects")
-    vault_path = os.path.join(base_path, project_name)
-    file_path = os.path.join(vault_path, file_name)
-
-    try:
-        with open(file_path, "x") as file:
-            pass  # No content written, just create the file
-        return f"File '{file_path}' was created successfully."
-    except FileExistsError:
-        return f"Error: File '{file_path}' already exists."
-    except PermissionError:
-        return f"Error: Permission denied when trying to create '{file_path}'."
-    except Exception as e:
-        return f"An unexpected error occurred: {e}"
+        error = f"An error occurred: {str(e)}"
+        logging.debug(f"An error occurred: {str(e)}")
+        return error
 
 if __name__ == "__main__":
     mcp.run()
