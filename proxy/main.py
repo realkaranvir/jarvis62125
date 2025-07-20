@@ -96,7 +96,6 @@ async def audio_query():
     try:
         transcription = await transcribe_file(audio_file)
         mcp_response = await query_mcp_server(transcription, history)
-        print(mcp_response)
         if not use_tts:
             return jsonify(mcp_response), 200
     except Exception as e:

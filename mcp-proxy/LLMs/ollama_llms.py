@@ -3,9 +3,9 @@ import utils
 
 class OllamaAPI:
     def __init__(self):
-        self.model = 'jarvis4-qwen:latest'
+        self.model = 'jarvis5-qwen:latest'
         self.context_len = 40000
-        self.response_limit = self.context_len // 4
+        self.response_limit = self.context_len // 100
         self.tool_use_id_counter = 0
         load_result = {'done': False}
         try:
@@ -39,9 +39,12 @@ class OllamaAPI:
             }
         } for tool in tools]
 
-        response = ollama.chat(model=self.model, think=False, messages=messages, tools=available_tools)
-        print(f"\nresponse: {response}\n")
+        if (len(messages) > 10):
+            messages = messages[len(messages) - 10:]
+
+        response = ollama.chat(model=self.model,think=False, messages=messages, tools=available_tools)
         tool_calls = []
+        llm_response = ""
         if response.message.tool_calls:
             tool_calls = [{'name': tool.function.name, 'args': tool.function.arguments, 'tool_use_id': str(self.tool_use_id_counter) } for tool in response.message.tool_calls]
         # Sometimes model returns tool call in content message
@@ -51,7 +54,6 @@ class OllamaAPI:
         else:
             llm_response = response.message.content
         result = {'llm_response': llm_response, 'tool_calls': tool_calls}
-        print(f"\n{result}\n")
         return result
 
     def format_tool_call(self, tool_use_id, tool_name, tool_args):

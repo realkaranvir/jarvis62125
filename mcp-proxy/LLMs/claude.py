@@ -26,6 +26,7 @@ class AnthropicAPI:
             tools=available_tools,
             system=SYSTEM_PROMPT
         )
+        print(response)
         tool_calls = []
         llm_response = ""
         for content in response.content:

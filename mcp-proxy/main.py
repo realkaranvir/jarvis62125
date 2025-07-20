@@ -62,6 +62,7 @@ async def query_llm():
         response = await client.process_query(query, history)
         return jsonify({'response': response}), 200
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":

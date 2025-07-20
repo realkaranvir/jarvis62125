@@ -80,15 +80,20 @@ class MCPClient:
                 tool_use_id = tool_call['tool_use_id']
 
                 result = await self.session.call_tool(tool_name, tool_args)
-                print(f"\nTool result: {utils.cap_start(result.content[0].text, self.llm.response_limit)}\n")
+                
                 tool_call = self.llm.format_tool_call(tool_use_id, tool_name, tool_args)
-                tool_result = self.llm.format_tool_result(tool_use_id, utils.cap_start(result.content[0].text, self.llm.response_limit))
+                
+                print(f"result: {result}")
+
+                tool_result = result.content[0].text if result.content else ""
+
+                tool_result = self.llm.format_tool_result(tool_use_id, utils.cap_start(tool_result, self.llm.response_limit))
 
                 messages.extend([tool_call, tool_result])
                 history.append({
                 'role': 'user',
-                'content': f'Tool called: {tool_name}'
-            })
+                'content': f'Tool called: {tool_name} with arguments: {tool_args}'
+                })
                 num_tool_calls_left -= 1
 
             response = self.llm.query_llm(
@@ -97,13 +102,13 @@ class MCPClient:
             )
 
             llm_response = response['llm_response']
-            
-            temp = {
-                'role': 'assistant',
-                'content': llm_response
-            }
-            messages.append(temp)
-            history.append(temp)
+            if (llm_response):
+                temp = {
+                    'role': 'assistant',
+                    'content': llm_response
+                }
+                messages.append(temp)
+                history.append(temp)
             tool_calls = response['tool_calls']
             num_tool_calls_left = len(tool_calls)
 
