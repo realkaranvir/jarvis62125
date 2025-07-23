@@ -1,6 +1,8 @@
 from quart import Quart, request, jsonify
 from quart_cors import cors
 
+import re
+
 import base64
 
 from urllib.parse import quote
@@ -102,7 +104,9 @@ async def audio_query():
         return jsonify({"error": e}), 500
     
     try:
-        wav = await text_to_speech(mcp_response.get("response").get("LLM_response"))
+        text = mcp_response.get("response").get("LLM_response")
+        new_text = re.sub(r"karan", "Kah-run", text, flags=re.IGNORECASE)
+        wav = await text_to_speech(new_text)
         full_response = mcp_response
         full_response.get("response")["tts_wav"] = wav
         return jsonify(full_response), 200

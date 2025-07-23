@@ -1,26 +1,46 @@
 <template>
-  <UContainer class="flex flex-col items-center h-screen">
-    <UContainer class="flex justify-center p-4">
+  <div class="flex flex-col items-center h-screen box-border">
+    <div class="flex items-center justify-center gap-4 p-4 box-border">
       <UButton :icon="micModeOn ? 'mdi-light:microphone' : 'mdi-light:microphone-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleMic() }" />
       <UButton :icon="speakerOn ? 'mdi-light:volume' : 'mdi-light:volume-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleSpeaker() }" />
       <UInput v-model="backendUrl" placeholder="https://backendurl.com/..." size="xl"/>
-    </UContainer>
-    <div class="w-full h-3/4 p-4 overflow-y-auto scroll-smooth" ref="scrollContainer">
-      <div
-        v-for="(item, index) in response"
-        :key="index"
-        :class="[
-          'flex', 
-          'mb-2',
-          item.role === 'User' ? 'justify-end text-right' : 'justify-start'
-        ]"
-      >
-          <p :class="['max-w-3/4', 'p-2', item.role === 'User' ? 'bg-gray-800 rounded-lg' : '']">
-          {{ item.text }}
-          </p>
+      <UIcon v-show="loading" name="mdi-light:loading" class="animate-spin size-6"/>
+      <UButton color="neutral" size="xl" variant="ghost" @click="() => { clearHistory() }">Clear History</UButton>
       </div>
+    <div class="flex justify-center items-end h-3/4 w-screen">
+      <!-- Left side: Jarvis Visualizer -->
+      <div class="h-full w-1/2">
+        <JarvisVisualizer />
+      </div>
+
+      <!-- Right side: Chat content (conditionally shown) -->
+      <transition
+        name="fade-slide"
+        mode="out-in"
+        appear
+      >
+        <div
+          v-if="response.length > 0"
+          class="w-1/2 h-full p-16 overflow-y-auto scroll-smooth box-border"
+          ref="scrollContainer"
+        >
+          <div
+            v-for="(item, index) in response"
+            :key="index"
+            :class="[
+              'flex',
+              'mb-2',
+              item.role === 'User' ? 'justify-end text-right' : 'justify-start'
+            ]"
+          >
+            <p class="max-w-3/4 text-white">
+              {{ item.text }}
+            </p>
+          </div>
+        </div>
+      </transition>
     </div>
-  </UContainer>
+  </div>
 </template>
 
 <script setup lang="js">
@@ -31,9 +51,15 @@ const micModeOn = ref(false);
 const speakerOn = ref(false);
 const response = ref([]);
 const history = ref([]);
-const backendUrl = ref("");
+const backendUrl = ref("http://localhost:5002");
 const scrollContainer = ref(null)
+const loading = ref(false);
 let myvad = null;
+
+const clearHistory = () => {
+  history.value = [];
+  response.value = [];
+}
 
 const scrollToBottom = () => {
   const el = scrollContainer.value
@@ -92,6 +118,7 @@ const startMicVAD = async () => {
 
 const playAudio = async (base64Wav) => {
   try {
+    window.dispatchEvent(new Event('va-start'));
     audio.src = "data:audio/wav;base64," + base64Wav;
     audio.playbackRate = 1.10;
 
@@ -100,12 +127,15 @@ const playAudio = async (base64Wav) => {
       audio.addEventListener("error", reject);
       audio.play().catch(reject);
     });
+    window.dispatchEvent(new Event('va-stop'));
   } catch (error) {
     console.error("Error playing audio:", error);
+    window.dispatchEvent(new Event('va-stop'));
   }
 };
 
 const getTextResponseFromAudio = async (audioBlob) => {
+  loading.value = true;
   turnOffMic();
   const formData = new FormData();
   if (audioBlob) {
@@ -113,6 +143,7 @@ const getTextResponseFromAudio = async (audioBlob) => {
   } else {
     console.error("No audio blob available to submit.");
     myvad.start();
+    loading.value = false;
     return;
   }
 
@@ -136,6 +167,7 @@ const getTextResponseFromAudio = async (audioBlob) => {
       })
     }
     history.value = data.response.history;
+    loading.value = false;
 
     if (speakerOn.value && data.response.tts_wav) {
       const wav = data.response.tts_wav;
@@ -150,8 +182,26 @@ const getTextResponseFromAudio = async (audioBlob) => {
     if (micModeOn.value) {
       turnOnMic();
     }
+    loading.value = false;
     return;
   }
 }
-
 </script>
+
+
+<style>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+</style>

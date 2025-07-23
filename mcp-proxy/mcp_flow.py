@@ -79,11 +79,11 @@ class MCPClient:
                 tool_args = tool_call['args']
                 tool_use_id = tool_call['tool_use_id']
 
+                print(f"\nCalling tool: {tool_name} with args: {tool_args}\n")
+
                 result = await self.session.call_tool(tool_name, tool_args)
-                
+
                 tool_call = self.llm.format_tool_call(tool_use_id, tool_name, tool_args)
-                
-                print(f"result: {result}")
 
                 tool_result = result.content[0].text if result.content else ""
 

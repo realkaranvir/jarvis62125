@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     manifest: {
       name: "Jarvis",
       short_name: "Jarvis",
-      theme_color: '#003399',
+      theme_color: '#000000',
       description: "Jarvis",
       icons: [
         {

@@ -1,11 +1,13 @@
 from typing import Any
 from dotenv import load_dotenv
 import requests
+import subprocess
 import os
 import sys
 import signal
 import logging
 from datetime import datetime
+from pdfminer.high_level import extract_text
 
 from mcp.server.fastmcp import FastMCP
 
@@ -33,6 +35,11 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
+
+def handleException(e: Exception):
+    error = f"An error occurred: {str(e)}"
+    logging.debug(f"An error occurred: {str(e)}")
+    return error
 
 def cleanse_brave_search(response):
     cleansed_result = {}
@@ -115,9 +122,42 @@ async def search_the_internet(query: str) -> str:
         search_results = brave_search(query)
         return search_results
     except Exception as e:
-        error = f"An error occurred: {str(e)}"
-        logging.debug(f"An error occurred: {str(e)}")
-        return error
+        return handleException(e)
+    
+@mcp.tool()
+async def execute_terminal_command(command: str) -> str:
+    """Execute a unix command in the unix terminal use ~/ as the root for directories.
+
+    Args:
+        command: The unix command to execute in string format.
+    
+    Returns:
+        The output of the command or an error message.
+    """
+    try:
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        if result.returncode != 0:
+            return f"Error executing command: {result.stderr.strip()}"
+        return result.stdout.strip()
+    except Exception as e:
+        return handleException(e)
+    
+@mcp.tool()
+async def read_pdf_file_as_txt(file_path: str) -> str:
+    """Reads the contents of a PDF file
+    
+    Args:
+        file_path: The filepath of the pdf file.
+
+    Returns:
+        The contents of the PDF file
+    """
+    try:
+        expanded_file_path = os.path.expanduser(file_path)
+        text = extract_text(expanded_file_path)
+        return text
+    except Exception as e:
+        return handleException(e)
 
 if __name__ == "__main__":
     mcp.run()

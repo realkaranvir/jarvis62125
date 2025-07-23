@@ -8,3 +8,6 @@ npm install
 ```
 npm run dev
 ```
+
+![[Pasted image 20250720234713.png]]
+![[Pasted image 20250720235021.png]]

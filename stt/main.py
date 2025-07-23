@@ -7,7 +7,7 @@ app = Quart(__name__)
 app = cors(app, allow_origin="*") # TODO: change later
 
 device_type = "cuda" if (torch.cuda.is_available()) else "cpu"
-compute_type = "float16" if (device_type == "cuda") else "int8"
+compute_type = "float16" if (device_type == "cuda") else "float32"
 default_model_size = "tiny" if (device_type == "cuda") else "tiny"
 
 print("Initializing TTS:")
