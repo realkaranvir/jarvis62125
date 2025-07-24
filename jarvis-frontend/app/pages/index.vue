@@ -1,15 +1,15 @@
 <template>
-  <div class="flex flex-col items-center h-screen box-border">
-    <div class="flex items-center justify-center gap-4 p-4 box-border">
+  <div class="flex flex-col items-center max-h-screen box-border">
+    <div class="flex items-center justify-center p-4 gap-4 box-border w-screen absolute top-0 z-1000 ">
       <UButton :icon="micModeOn ? 'mdi-light:microphone' : 'mdi-light:microphone-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleMic() }" />
       <UButton :icon="speakerOn ? 'mdi-light:volume' : 'mdi-light:volume-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleSpeaker() }" />
-      <UInput v-model="backendUrl" placeholder="https://backendurl.com/..." size="xl"/>
-      <UIcon v-show="loading" name="mdi-light:loading" class="animate-spin size-6"/>
       <UButton color="neutral" size="xl" variant="ghost" @click="() => { clearHistory() }">Clear History</UButton>
-      </div>
-    <div class="flex justify-center items-end h-3/4 w-screen">
-      <!-- Left side: Jarvis Visualizer -->
-      <div class="h-full w-1/2">
+      <UButton color="neutral" size="xl" variant="ghost" @click="() => { insertTestResponse() }">Insert Test Response</UButton>
+      <UInput variant="ghost" v-model="backendUrl" placeholder="https://backendurl.com/..." size="xl"/>
+      <UIcon v-show="loading" name="mdi-light:loading" class="animate-spin size-6"/>
+    </div>
+    <div class="flex justify-center items-end box-border w-screen h-screen">
+      <div class="h-full w-full">
         <JarvisVisualizer />
       </div>
 
@@ -21,7 +21,7 @@
       >
         <div
           v-if="response.length > 0"
-          class="w-1/2 h-full p-16 overflow-y-auto scroll-smooth box-border"
+          class="w-1/2 h-[80%] overflow-y-auto scroll-smooth px-8 box-border absolute top-1/2 transform -translate-y-1/2 right-0"
           ref="scrollContainer"
         >
           <div
@@ -44,7 +44,8 @@
 </template>
 
 <script setup lang="js">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, watchEffect } from 'vue'
+import { getTestResponse } from "../composables/Utils";
 const { MicVAD, utils } = await import("@ricky0123/vad-web");
 let audio = null;
 const micModeOn = ref(false);
@@ -56,9 +57,21 @@ const scrollContainer = ref(null)
 const loading = ref(false);
 let myvad = null;
 
+watchEffect(() => {
+  if (response.value.length === 0) {
+    window.dispatchEvent(new Event('chat-empty'));
+  } else {
+    window.dispatchEvent(new Event('chat-non-empty'));
+  }
+});
+
 const clearHistory = () => {
   history.value = [];
   response.value = [];
+}
+
+const insertTestResponse = () => {
+  response.value.push(getTestResponse());
 }
 
 const scrollToBottom = () => {
@@ -197,7 +210,7 @@ const getTextResponseFromAudio = async (audioBlob) => {
 .fade-slide-enter-from,
 .fade-slide-leave-to {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateX(100px);
 }
 .fade-slide-enter-to,
 .fade-slide-leave-from {
