@@ -5,12 +5,11 @@ class AnthropicAPI:
         self.anthropic = Anthropic()
         self.context_len = 128000
         self.response_limit = self.context_len // 20
+        self.NAME = "Jarvis"
+        self.SYSTEM_PROMPT = f"Your name is {self.NAME}. You are a formal, concise assistant who always refers to the user as sir. You answer in no more than two sentences. Do not ask follow-up questions unless absolutely necessary to understand the current query. Do not offer additional information, suggestions, or clarifications unless directly requested. You are helpful but reserved. If a question cannot be answered without more information, state that clearly and wait for further input. You have access to tools, but you will only use them when the question cannot be answered directly."
 
     def query_llm(self, messages: list, tools: list):
         """Query the Anthropic LLM with given messages and tools"""
-
-        NAME = "Jarvis"
-        SYSTEM_PROMPT = f"Your name is {NAME}. You are a formal, concise assistant who always refers to the user as sir. You answer in no more than two sentences. Do not ask follow-up questions unless absolutely necessary to understand the current query. Do not offer additional information, suggestions, or clarifications unless directly requested. You are helpful but reserved. If a question cannot be answered without more information, state that clearly and wait for further input. You have access to tools, but you will only use them when the question cannot be answered directly."
         
         # Structure tools for Anthropic API
         available_tools = [{
@@ -24,7 +23,7 @@ class AnthropicAPI:
             max_tokens=1000,
             messages=messages,
             tools=available_tools,
-            system=SYSTEM_PROMPT
+            system=self.SYSTEM_PROMPT
         )
         print(response)
         tool_calls = []
@@ -50,6 +49,7 @@ class AnthropicAPI:
                         ]
                     }
         return tool_call
+    
     def format_tool_result(self, tool_use_id, result):
         tool_result = {
                         "role": "user",
@@ -62,3 +62,16 @@ class AnthropicAPI:
                         ]
                     }
         return tool_result
+    
+    def query_helper(self, query):
+        messages=[{
+            "role": "user",
+            "content": query
+        }]
+        response = self.anthropic.messages.create(
+            model="claude-3-7-sonnet-20250219",
+            max_tokens=1000,
+            messages=messages,
+            system=self.SYSTEM_PROMPT
+        )
+        return response

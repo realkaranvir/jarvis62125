@@ -8,14 +8,17 @@ import signal
 import logging
 from datetime import datetime
 from pdfminer.high_level import extract_text
-
 from mcp.server.fastmcp import FastMCP
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from functionPrompts import prompts
+from LLMs import ollama_llms, claude
+import todolist
+
 
 # Constants
 DATA_PATH = "~/jarvis_data"
 OBSIDIAN_BASE_PATH = "~/jarvis_data/obsidian_projects"
 LOG_FOLDER = "~/jarvis_data/logs"
-
 
 # Initializing server
 mcp = FastMCP()
@@ -25,9 +28,13 @@ os.makedirs(log_dir, exist_ok=True)
 log_file = os.path.join(log_dir, "err.log")
 logging.basicConfig(
     filename=log_file,
-    level=logging.ERROR,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    force=True
 )
+llm = claude.AnthropicAPI()
+
+todo_list = todolist.TodoList(DATA_PATH, "todolist.txt")
 
 # Handle SIGINT (Ctrl+C) gracefully
 def signal_handler(sig, frame):
@@ -38,7 +45,7 @@ signal.signal(signal.SIGINT, signal_handler)
 
 def handleException(e: Exception):
     error = f"An error occurred: {str(e)}"
-    logging.debug(f"An error occurred: {str(e)}")
+    logging.error(f"An error occurred: {str(e)}")
     return error
 
 def cleanse_brave_search(response):
@@ -70,27 +77,6 @@ def cleanse_brave_search(response):
 
     return cleansed_result
 
-def safe_join(base_dir: str, user_input_path: str) -> str:
-    """
-    Safely join base_dir with user_input_path to prevent directory traversal.
-    
-    Returns the absolute safe path if valid, or raises a ValueError if invalid.
-    """
-    # Expand ~ to home directory
-    base_dir = os.path.expanduser(base_dir)
-    user_input_path = os.path.expanduser(user_input_path)
-
-    # Join and normalize
-    full_path = os.path.abspath(os.path.join(base_dir, user_input_path))
-
-    # Normalize base_dir after expansion
-    base_dir = os.path.abspath(base_dir)
-    if not full_path.startswith(base_dir + os.sep):
-        raise ValueError("Invalid path: attempting to access outside of base directory.")
-
-    return full_path
-
-
 def brave_search(query: str, count: int = 20):
     url = "https://api.search.brave.com/res/v1/web/search"
     headers = {
@@ -109,13 +95,10 @@ def brave_search(query: str, count: int = 20):
 
 @mcp.tool()
 async def search_the_internet(query: str) -> str:
-    """Search the internet for information with a given query. Only use if you don't know the answer
+    """Search the internet for information with a given query. Only use if you don't know the answer.
     
     Args:
-        query: Search query to look up
-    
-    Returns:
-        Extracted information from the search results or error message
+        query: Search query to look up.
     """
     try:
         search_results = None
@@ -130,9 +113,6 @@ async def execute_terminal_command(command: str) -> str:
 
     Args:
         command: The unix command to execute in string format.
-    
-    Returns:
-        The output of the command or an error message.
     """
     try:
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
@@ -144,18 +124,49 @@ async def execute_terminal_command(command: str) -> str:
     
 @mcp.tool()
 async def read_pdf_file_as_txt(file_path: str) -> str:
-    """Reads the contents of a PDF file
+    """Reads the contents of a PDF file.
     
     Args:
         file_path: The filepath of the pdf file.
-
-    Returns:
-        The contents of the PDF file
     """
     try:
         expanded_file_path = os.path.expanduser(file_path)
         text = extract_text(expanded_file_path)
         return text
+    except Exception as e:
+        return handleException(e)
+    
+@mcp.tool()
+async def add_to_todo_list(task_name: str):
+    """Adds an item to the todo list. Check if an item already exists by calling get_todo_list() first.
+    
+    Args:
+        task_name: The name of the task to add.
+    """
+    try:
+        todo_list.add_task(task_name)
+        return f"Task '{task_name}' successfully created"
+    except Exception as e:
+        return handleException(e)
+    
+@mcp.tool()
+async def remove_from_todo_list(task_name: str):
+    """Removes an item from todo list. Check task_name formatting by calling get_todo_list() first.
+    
+    Args:
+        task_name: The name of the task to remove.
+    """
+    try:
+        todo_list.remove_task(task_name)
+        return f"Task '{task_name}' successfully removed"
+    except Exception as e:
+        return handleException(e)
+    
+@mcp.tool()
+async def get_todo_list():
+    """Get the todo list"""
+    try:
+        return "\n".join(todo_list.get_todo_list())
     except Exception as e:
         return handleException(e)
 

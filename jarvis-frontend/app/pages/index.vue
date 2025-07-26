@@ -29,7 +29,7 @@
             :key="index"
             :class="[
               'flex',
-              'mb-2',
+              'mb-16',
               item.role === 'User' ? 'justify-end text-right' : 'justify-start'
             ]"
           >

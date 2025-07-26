@@ -2,8 +2,8 @@ import ollama
 import utils
 
 class OllamaAPI:
-    def __init__(self):
-        self.model = 'jarvis5-qwen:latest'
+    def __init__(self, model):
+        self.model = model
         self.context_len = 40000
         self.response_limit = self.context_len // 10
         self.tool_use_id_counter = 0
@@ -42,7 +42,7 @@ class OllamaAPI:
         if (len(messages) > 10):
             messages = messages[len(messages) - 10:]
 
-        response = ollama.chat(model=self.model,think=False, messages=messages, tools=available_tools)
+        response = ollama.chat(model=self.model, think=False, messages=messages, tools=available_tools)
         tool_calls = []
         llm_response = ""
         if response.message.tool_calls:
@@ -81,3 +81,6 @@ class OllamaAPI:
                         ])
                     }
         return tool_result
+    def query_helper(self, query):
+        response = ollama.generate(model=self.model, think=False, prompt=query, stream=False)
+        return response.response

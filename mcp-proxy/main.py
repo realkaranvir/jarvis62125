@@ -9,7 +9,7 @@ from mcp_flow import MCPClient
 
 load_dotenv() # Load environment variables from .env
 
-client = MCPClient(ollama_llms.OllamaAPI())
+client = MCPClient(claude.AnthropicAPI())
 
 app = Quart(__name__)
 app = cors(app, allow_origin="*") # TODO: Change to certain origins later
