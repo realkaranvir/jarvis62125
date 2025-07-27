@@ -5,7 +5,7 @@ class OllamaAPI:
     def __init__(self):
         self.model = 'jarvis5-qwen:latest'
         self.context_len = 40000
-        self.response_limit = self.context_len // 100
+        self.response_limit = self.context_len // 10
         self.tool_use_id_counter = 0
         load_result = {'done': False}
         try:

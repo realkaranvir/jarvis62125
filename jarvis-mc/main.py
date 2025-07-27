@@ -4,6 +4,7 @@ import threading
 import time
 import signal
 import sys
+import re
 
 import httpx
 import json
@@ -34,7 +35,7 @@ signal.signal(signal.SIGINT, signal_handler)
 async def ask_llm(process, query, history = []):
     proxy_url = "https://jarvis-api.com/proxy/text-query"
     data = {
-        "query": f"{query}.",
+        "query": f"If asking about information that could change over time, use tools for the following query: \n{query}.",
         "history": json.dumps(history),
     }
     try:
@@ -54,15 +55,24 @@ def write_input(process, input_text):
     process.stdin.write(input_text.encode() + b"\n")
     process.stdin.flush()
 
+def clean_input_line(input_line):
+    match = re.search(r"]:\s<[^>]+>\s(.+)", input_line)
+    if match:
+        message = match.group(1)
+        return message
+    return False
+
 def read_output(process, loop):
     for line in iter(process.stdout.readline, b""):
         output_line = line.decode().strip()
         print(output_line)
-        if AI_NAME.lower() in output_line.lower() and "[SERVER]" not in output_line:
-            asyncio.run_coroutine_threadsafe(
-                ask_llm(process, output_line, []),
-                loop
-            )
+        if AI_NAME.lower() in output_line.lower() and "[Server]".lower() not in output_line.lower():
+            cleaned_line = clean_input_line(output_line)
+            if cleaned_line:
+                asyncio.run_coroutine_threadsafe(
+                    ask_llm(process, cleaned_line, []),
+                    loop
+                )
 
 def main():
     global process
