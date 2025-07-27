@@ -1,7 +1,7 @@
 <template>
   <UContainer class="flex flex-col items-center h-screen">
     <UContainer class="flex justify-center p-4">
-      <UButton :icon="micOn ? 'mdi-light:microphone' : 'mdi-light:microphone-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleMic() }" />
+      <UButton :icon="micModeOn ? 'mdi-light:microphone' : 'mdi-light:microphone-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleMic() }" />
       <UButton :icon="speakerOn ? 'mdi-light:volume' : 'mdi-light:volume-off'" color="neutral" size="xl" variant="ghost" @click="() => { toggleSpeaker() }" />
       <UInput v-model="backendUrl" placeholder="https://backendurl.com/..." size="xl"/>
     </UContainer>
@@ -9,18 +9,15 @@
       <div
         v-for="(item, index) in response"
         :key="index"
-          :class="[
-            'flex', 
-            'p-2', 
-            'mb-2',
-            item.role === 'User' ? 'justify-end' : 'justify-start'  // Customize this based on role
-          ]"
+        :class="[
+          'flex', 
+          'mb-2',
+          item.role === 'User' ? 'justify-end text-right' : 'justify-start'
+        ]"
       >
-        <div>
-          <p class="w-3/4">
+          <p :class="['max-w-3/4', 'p-2', item.role === 'User' ? 'bg-gray-800 rounded-lg' : '']">
           {{ item.text }}
           </p>
-        </div>
       </div>
     </div>
   </UContainer>
@@ -30,7 +27,7 @@
 import { ref, nextTick } from 'vue'
 const { MicVAD, utils } = await import("@ricky0123/vad-web");
 let audio = null;
-const micOn = ref(false);
+const micModeOn = ref(false);
 const speakerOn = ref(false);
 const response = ref([]);
 const history = ref([]);
@@ -46,12 +43,12 @@ const scrollToBottom = () => {
 }
 
 const toggleMic = () => {
-  if (micOn.value) {
+  if (micModeOn.value) {
     turnOffMic();
   } else {
     turnOnMic();
   }
-  micOn.value = !micOn.value;
+  micModeOn.value = !micModeOn.value;
 }
 
 const turnOffMic = () => {
@@ -80,6 +77,7 @@ const startMicVAD = async () => {
   try {
     myvad = await MicVAD.new({
       onSpeechEnd: (audio) => {
+        if (!micModeOn.value) { return; }
         const wavBuffer = utils.encodeWAV(audio);
         const audioBlob = new Blob([wavBuffer], { type: "audio/wav" });
         getTextResponseFromAudio(audioBlob);
@@ -139,15 +137,19 @@ const getTextResponseFromAudio = async (audioBlob) => {
     }
     history.value = data.response.history;
 
-    if (speakerOn.value) {
+    if (speakerOn.value && data.response.tts_wav) {
       const wav = data.response.tts_wav;
       await playAudio(wav);
     }
-    turnOnMic();
+    if (micModeOn.value) {
+      turnOnMic();
+    }
 
   } catch (error) {
     console.error(`Error: ${error}`);
-    turnOnMic();
+    if (micModeOn.value) {
+      turnOnMic();
+    }
     return;
   }
 }

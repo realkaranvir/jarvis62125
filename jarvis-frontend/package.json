@@ -12,7 +12,7 @@
     "lint:fix": "eslint --fix .",
     "predeploy": "npm run generate",
     "deploy": "gh-pages -d dist",
-    "printActionsLink": "echo https://github.com/realkaranvir/jarvis62125/actions",
+    "printActionsLink": "clear && echo Check deployment status: https://github.com/realkaranvir/jarvis62125/actions",
     "gdeploy": "npm run generate && npm run deploy && npm run printActionsLink"
   },
   "dependencies": {

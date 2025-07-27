@@ -107,7 +107,8 @@ async def audio_query():
         full_response.get("response")["tts_wav"] = wav
         return jsonify(full_response), 200
     except Exception as e:
-        return jsonify({"error": e}), 500
+        # Even if stt fails, we should still return the mcp response
+        return jsonify(mcp_response), 200
 
 @app.route("/proxy/text-query", methods=["POST"])
 async def text_query():
