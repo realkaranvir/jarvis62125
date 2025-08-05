@@ -1,9 +1,121 @@
-*.venv
+# ========== Python ==========
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
 venv/
-.DS_Store
-tts/models/*
-node_modules
-*.idea
-*.idea/*
-data
+ENV/
+env/
+
+# ========== Environment Files ==========
 *.env
+*.env.*
+!.env.example
+
+# ========== Node.js ==========
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# ========== macOS ==========
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# ========== IDEs & Editors ==========
+.idea/
+*.idea/
+*.sublime-project
+*.sublime-workspace
+.vscode/
+*.code-workspace
+.fleet
+
+# ========== Nuxt/Nitro ==========
+.output/
+.data/
+.nuxt/
+.nitro/
+.cache/
+dist/
+logs/
+*.log
+
+# ========== Project Files ==========
+tts/models/*
+data/
+*/.obsidian/
+*/__pycache__/
+
+# ========== Misc ==========
+*.bak
+*.tmp
+*.orig
+*.old
+*.swp
+*.swo
+*.~undo
+*.rej
+*.class
+*.out
+
+# ========== Compiled ==========
+*.o
+*.so
+*.a
+*.dll
+*.exe
+*.dylib
+
+# ========== Archives ==========
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ========== Docker ==========
+*.pid
+*.pid.lock
+docker-compose.override.yml
+
+# ========== Jupyter ==========
+.ipynb_checkpoints/
+*.ipynb
+
+# ========== Coverage / Test ==========
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+coverage.xml
+nosetests.xml
+test-results.xml
+
+# ========== Security ==========
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+*.cert
+
+# ========== Git ==========
+!README.md

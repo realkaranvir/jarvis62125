@@ -1,144 +1,103 @@
-from quart import Quart, request, jsonify
-from quart_cors import cors
+# main.py
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
-import re
-
-import base64
-
+import httpx, base64, json, re
 from urllib.parse import quote
 
-import json
-import httpx
+app = FastAPI()
 
-app = Quart(__name__)
-app = cors(app, allow_origin="*") # TODO: change later
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          # TODO: tighten for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-async def transcribe_file(audio_file):
-    speech_to_text_url = "http://localhost:5001/transcribe"
-
-    files = {
-        "file": (audio_file.filename, audio_file.stream, audio_file.content_type)
-    }
+# Helper functions
+async def transcribe_file(audio_file: UploadFile) -> str:
+    stt_url = "http://localhost:5001/transcribe"
+    files = {"file": (audio_file.filename, await audio_file.read(), audio_file.content_type)}
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(speech_to_text_url, files=files)
+        resp = await client.post(stt_url, files=files)
 
-    data = response.json()
-    transcription = data.get("transcription")
-    
+    transcription = resp.json().get("transcription")
     if not transcription:
-        raise Exception("STT error: Transcription is Null")
-    elif len(transcription) == 0:
-        raise Exception("STT error: Transcription is empty")
-    
+        raise HTTPException(status_code=500, detail="STT error: transcription empty")
     return transcription
-    
+
+
 async def query_mcp_server(query: str, history: list):
     mcp_url = "http://127.0.0.1:5000/query"
-
-    payload = {
-        "query": query,
-        "history": history
-    }
-
     async with httpx.AsyncClient(timeout=120.0) as client:
-        response = await client.post(mcp_url, json=payload)
+        resp = await client.post(mcp_url, json={"query": query, "history": history})
+    return resp.json()
 
-    data = response.json()
-    return data
 
-async def text_to_speech(text: str):
+async def text_to_speech(text: str) -> str:
     if not text:
-        raise Exception("TTS error: text is empty")
-    
-    encoded_text = quote(text)
-    text_to_speech_url = f"http://localhost:5008/?text={encoded_text}"
+        raise HTTPException(status_code=500, detail="TTS error: text empty")
 
+    tts_url = f"http://localhost:5008/?text={quote(text)}"
     async with httpx.AsyncClient(timeout=120.0) as client:
-        wav = await client.get(text_to_speech_url)
+        wav_resp = await client.get(tts_url)
 
-    wav_bytes = wav.content
+    return base64.b64encode(wav_resp.content).decode("utf-8")
 
-    encoded_wav = base64.b64encode(wav_bytes).decode("utf-8")
-
-    return encoded_wav
-
-@app.route("/proxy/health", methods=["GET"])
+# Endpoints
+@app.get("/proxy/health")
 async def health_check():
-    """Health check endpoint"""
-    return jsonify({"status": "healthy"}), 200
+    return {"status": "healthy"}
 
-@app.route("/proxy/audio-query", methods=["POST"])
-async def audio_query():
-    """
-    Audio query endpoint. Takes in an audio blob and history, gets transcription from STT server, 
-    gets the MCP server's response, and returns audio blob and MCP JSON response.
-    """
-    files = await request.files
-    form = await request.form
 
-    audio_file = files.get("file")
-    history_str = form.get("history")
-
-    use_tts = False
-    if form.get("use_tts").lower() == "true":
-        use_tts = True
-
-    if not audio_file or not history_str:
-        return jsonify({"error": "Missing audio file or history"}), 400
-
+@app.post("/proxy/audio-query")
+async def audio_query(
+    file: UploadFile = File(...),
+    history: str = Form(...),
+    use_tts: str = Form("false")
+):
+    # Parse history
     try:
-        history = json.loads(history_str)
-        if not isinstance(history, list):
-            raise ValueError("History is not an array")
-    except json.JSONDecodeError:
-        return jsonify({"error": "Invalid JSON in history"}), 400
+        history_obj = json.loads(history)
+        if not isinstance(history_obj, list):
+            raise ValueError
+    except (json.JSONDecodeError, ValueError):
+        raise HTTPException(status_code=400, detail="Invalid JSON in history")
 
-    mcp_response = None
+    # Core pipeline
+    transcription = await transcribe_file(file)
+    mcp_resp = await query_mcp_server(transcription, history_obj)
+
+    if use_tts.lower() != "true":
+        return JSONResponse(content=mcp_resp)
+
+    # Optional TTS augmentation
+    text = mcp_resp.get("response", {}).get("LLM_response", "")
+    new_text = re.sub(r"karan", "Kah-run", text, flags=re.IGNORECASE)
     try:
-        transcription = await transcribe_file(audio_file)
-        mcp_response = await query_mcp_server(transcription, history)
-        if not use_tts:
-            return jsonify(mcp_response), 200
-    except Exception as e:
-        return jsonify({"error": e}), 500
-    
+        wav_b64 = await text_to_speech(new_text)
+        mcp_resp.setdefault("response", {})["tts_wav"] = wav_b64
+    except Exception:
+        # Fail soft—return MCP response even if TTS fails
+        pass
+
+    return JSONResponse(content=mcp_resp)
+
+@app.post("/proxy/text-query")
+async def text_query(
+    query: str = Form(...),
+    history: str = Form(...)
+):
     try:
-        text = mcp_response.get("response").get("LLM_response")
-        new_text = re.sub(r"karan", "Kah-run", text, flags=re.IGNORECASE)
-        wav = await text_to_speech(new_text)
-        full_response = mcp_response
-        full_response.get("response")["tts_wav"] = wav
-        return jsonify(full_response), 200
-    except Exception as e:
-        # Even if stt fails, we should still return the mcp response
-        return jsonify(mcp_response), 200
+        history_obj = json.loads(history)
+        if not isinstance(history_obj, list):
+            raise ValueError
+    except (json.JSONDecodeError, ValueError):
+        raise HTTPException(status_code=400, detail="Invalid JSON in history")
 
-@app.route("/proxy/text-query", methods=["POST"])
-async def text_query():
-    """
-    Text query endpoint. Takes in query and history, forwards request to mcp server, and returns the result.
-    """
-    form = await request.form
-
-    query = form.get("query")
-    history_str = form.get("history")
-
-    if not history_str:
-        return jsonify({"error": "Missing history"}), 400
-
-    try:
-        history = json.loads(history_str)
-        if not isinstance(history, list):
-            raise ValueError("History is not an array")
-    except json.JSONDecodeError:
-        return jsonify({"error": "Invalid JSON in history"}), 400    
-
-    try:
-        data = await query_mcp_server(query, history)
-        return jsonify(data), 200
-    except Exception as e:
-        return jsonify({"error": e}), 500
-
-if __name__ == "__main__":
-    app.run(use_reloader=False, debug=True, port=5002) # TODO: change
+    data = await query_mcp_server(query, history_obj)
+    return JSONResponse(content=data)

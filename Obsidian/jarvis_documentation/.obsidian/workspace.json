@@ -69,12 +69,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Frontend (Vue).md",
+                "file": "Text To Speech (TTS).md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Frontend (Vue)"
+              "title": "Text To Speech (TTS)"
             }
           }
         ],
@@ -222,6 +222,7 @@
   },
   "active": "8ebb45d16c668e79",
   "lastOpenFiles": [
+    "Frontend (Vue).md",
     "Pasted image 20250720235021.png",
     "Pasted image 20250720234713.png",
     "Text To Speech (TTS).md",
@@ -230,7 +231,6 @@
     "Todo.md",
     "Requirements.md",
     "Running All Services.md",
-    "VPN (ZeroTier).md",
-    "Frontend (Vue).md"
+    "VPN (ZeroTier).md"
   ]
 }

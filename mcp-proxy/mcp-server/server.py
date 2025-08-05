@@ -9,9 +9,6 @@ import logging
 from datetime import datetime
 from pdfminer.high_level import extract_text
 from mcp.server.fastmcp import FastMCP
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from functionPrompts import prompts
-from LLMs import ollama_llms, claude
 import todolist
 
 
@@ -32,7 +29,6 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s',
     force=True
 )
-llm = claude.AnthropicAPI()
 
 todo_list = todolist.TodoList(DATA_PATH, "todolist.txt")
 
