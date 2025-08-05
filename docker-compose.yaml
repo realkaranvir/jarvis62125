@@ -1,0 +1,22 @@
+services:
+  proxy:
+    build: ./proxy
+    ports:
+      - "5002:5002"
+    depends_on:
+      - agent
+      - stt
+      - tts
+  agent:
+    build: ./jarvis-agent
+    ports:
+      - "5003:5003"
+    env_file: ./jarvis-agent/.env
+  stt:
+    build: ./stt
+    ports:
+      - "5001:5001"
+  tts:
+    build: ./tts
+    ports:
+      - "5008:5008"

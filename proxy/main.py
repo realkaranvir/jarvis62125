@@ -1,10 +1,8 @@
-# main.py
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 import httpx, base64, json, re
-from urllib.parse import quote
 
 app = FastAPI()
 
@@ -19,7 +17,7 @@ app.add_middleware(
 
 # Helper functions
 async def transcribe_file(audio_file: UploadFile) -> str:
-    stt_url = "http://localhost:5001/transcribe"
+    stt_url = "http://stt:5001/transcribe"
     files = {"file": (audio_file.filename, await audio_file.read(), audio_file.content_type)}
 
     async with httpx.AsyncClient() as client:
@@ -32,19 +30,18 @@ async def transcribe_file(audio_file: UploadFile) -> str:
 
 
 async def query_mcp_server(query: str, history: list):
-    mcp_url = "http://127.0.0.1:5000/query"
+    mcp_url = "http://agent:5003/query"
     async with httpx.AsyncClient(timeout=120.0) as client:
-        resp = await client.post(mcp_url, json={"query": query, "history": history})
+        resp = await client.post(mcp_url, data={"query": query, "history": json.dumps(history)})
     return resp.json()
-
 
 async def text_to_speech(text: str) -> str:
     if not text:
         raise HTTPException(status_code=500, detail="TTS error: text empty")
 
-    tts_url = f"http://localhost:5008/?text={quote(text)}"
+    tts_url = f"http://tts:5008/generate-speech"
     async with httpx.AsyncClient(timeout=120.0) as client:
-        wav_resp = await client.get(tts_url)
+        wav_resp = await client.post(tts_url, data={"text": text})
 
     return base64.b64encode(wav_resp.content).decode("utf-8")
 
