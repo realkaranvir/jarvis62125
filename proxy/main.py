@@ -29,10 +29,10 @@ async def transcribe_file(audio_file: UploadFile) -> str:
     return transcription
 
 
-async def query_mcp_server(query: str, history: list):
+async def query_mcp_server(query: str, session_id: str):
     mcp_url = "http://agent:5003/query"
     async with httpx.AsyncClient(timeout=120.0) as client:
-        resp = await client.post(mcp_url, data={"query": query, "history": json.dumps(history)})
+        resp = await client.post(mcp_url, data={"query": query, "session_id": session_id})
     return resp.json()
 
 async def text_to_speech(text: str) -> str:
@@ -54,27 +54,19 @@ async def health_check():
 @app.post("/proxy/audio-query")
 async def audio_query(
     file: UploadFile = File(...),
-    history: str = Form(...),
+    session_id: str = Form(...),
     use_tts: str = Form("false")
 ):
-    # Parse history
-    try:
-        history_obj = json.loads(history)
-        if not isinstance(history_obj, list):
-            raise ValueError
-    except (json.JSONDecodeError, ValueError):
-        raise HTTPException(status_code=400, detail="Invalid JSON in history")
 
     # Core pipeline
     transcription = await transcribe_file(file)
-    mcp_resp = await query_mcp_server(transcription, history_obj)
+    mcp_resp = await query_mcp_server(transcription, session_id)
 
     if use_tts.lower() != "true":
         return JSONResponse(content=mcp_resp)
 
-    # Optional TTS augmentation
     text = mcp_resp.get("response", {}).get("LLM_response", "")
-    new_text = re.sub(r"karan", "Kah-run", text, flags=re.IGNORECASE)
+    new_text = re.sub(r"karan", "Kah-run", text, flags=re.IGNORECASE) # TODO: implement in agent
     try:
         wav_b64 = await text_to_speech(new_text)
         mcp_resp.setdefault("response", {})["tts_wav"] = wav_b64
@@ -87,14 +79,7 @@ async def audio_query(
 @app.post("/proxy/text-query")
 async def text_query(
     query: str = Form(...),
-    history: str = Form(...)
+    session_id: str = Form(...)
 ):
-    try:
-        history_obj = json.loads(history)
-        if not isinstance(history_obj, list):
-            raise ValueError
-    except (json.JSONDecodeError, ValueError):
-        raise HTTPException(status_code=400, detail="Invalid JSON in history")
-
-    data = await query_mcp_server(query, history_obj)
+    data = await query_mcp_server(query, session_id)
     return JSONResponse(content=data)

@@ -51,7 +51,6 @@ let audio = null;
 const micModeOn = ref(false);
 const speakerOn = ref(false);
 const response = ref([]);
-const history = ref([]);
 const backendUrl = ref("http://localhost:5002");
 const scrollContainer = ref(null)
 const loading = ref(false);
@@ -66,7 +65,6 @@ watchEffect(() => {
 });
 
 const clearHistory = () => {
-  history.value = [];
   response.value = [];
 }
 
@@ -133,7 +131,7 @@ const playAudio = async (base64Wav) => {
   try {
     window.dispatchEvent(new Event('va-start'));
     audio.src = "data:audio/wav;base64," + base64Wav;
-    audio.playbackRate = 1.10;
+    audio.playbackRate = 1.0;
 
     await new Promise((resolve, reject) => {
       audio.addEventListener("ended", resolve);
@@ -160,7 +158,7 @@ const getTextResponseFromAudio = async (audioBlob) => {
     return;
   }
 
-  formData.append("history", JSON.stringify(history.value));
+  formData.append("session_id", ""); // TODO: Replace with actual session ID
   formData.append("use_tts", speakerOn.value ? "true" : "false");
 
   try {
@@ -179,7 +177,6 @@ const getTextResponseFromAudio = async (audioBlob) => {
         scrollToBottom()
       })
     }
-    history.value = data.response.history;
     loading.value = false;
 
     if (speakerOn.value && data.response.tts_wav) {

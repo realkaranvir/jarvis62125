@@ -1,7 +1,8 @@
+import asyncio
 from fastapi import FastAPI, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from agentworkflow import workflow
+from agentworkflow import general_workflow
 from agents import RunResult
 
 app = FastAPI()
@@ -24,8 +25,8 @@ async def health():
     return {"status": "healthy"}
 
 @app.post("/query")
-async def query(query: str = Form(...), history: str = Form(...)):
-    result: RunResult = await workflow.run_workflow(query)
+async def query(query: str = Form(...), session_id: str = Form(...)):
+    result: RunResult = await general_workflow.run_workflow(query, session_id)
     result_obj = {
         "response":{
             "query": query,
